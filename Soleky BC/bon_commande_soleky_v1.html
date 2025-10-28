@@ -1,0 +1,1227 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bon de Commande - Soleky</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            padding: 40px;
+        }
+
+        .doc-title {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .doc-title h1 {
+            color: #667eea;
+            font-size: 32px;
+            margin-bottom: 5px;
+        }
+
+        .doc-meta {
+            display: flex;
+            justify-content: space-between;
+            background: #f8f9ff;
+            padding: 12px 20px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+        }
+
+        .doc-meta div {
+            font-size: 14px;
+        }
+
+        .doc-meta strong {
+            color: #667eea;
+        }
+
+        .header {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+
+        .header-left {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .header-right {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .logo-section {
+            position: relative;
+        }
+
+        .logo-placeholder {
+            width: 150px;
+            height: 80px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 24px;
+        }
+
+        .logo-image {
+            max-width: 150px;
+            max-height: 80px;
+            object-fit: contain;
+        }
+
+        .logo-edit-note {
+            font-size: 10px;
+            color: #999;
+            margin-top: 5px;
+            font-style: italic;
+        }
+
+        .company-info {
+            font-size: 13px;
+            color: #333;
+            line-height: 1.8;
+        }
+
+        .company-info strong {
+            color: #667eea;
+            display: block;
+            font-size: 16px;
+            margin-bottom: 8px;
+        }
+
+        .client-info-header {
+            background: #f8f9ff;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        .client-info-header h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        .client-field {
+            margin-bottom: 12px;
+        }
+
+        .client-field label {
+            display: block;
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        .client-field input {
+            width: 100%;
+            padding: 8px;
+            border: 2px solid #e0e0e0;
+            border-radius: 5px;
+            font-size: 13px;
+        }
+
+        .client-field input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .section {
+            margin: 30px 0;
+        }
+
+        .section-title {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .products-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 13px;
+        }
+
+        .products-table th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 8px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .products-table td {
+            padding: 10px 8px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .products-table tr:hover {
+            background-color: #f8f9ff;
+        }
+
+        .products-table input[type="number"] {
+            width: 80px;
+            padding: 5px;
+            border: 1px solid #e0e0e0;
+            border-radius: 3px;
+            text-align: center;
+        }
+
+        .products-table select {
+            padding: 5px;
+            border: 1px solid #e0e0e0;
+            border-radius: 3px;
+            background: white;
+            cursor: pointer;
+            min-width: 100px;
+        }
+
+        .total-section {
+            margin-top: 20px;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .total-box {
+            background: #f8f9ff;
+            padding: 20px;
+            border-radius: 10px;
+            min-width: 350px;
+            border: 2px solid #667eea;
+        }
+
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            font-size: 14px;
+            align-items: center;
+        }
+
+        .total-row.grand-total {
+            border-top: 2px solid #667eea;
+            margin-top: 10px;
+            padding-top: 10px;
+            font-weight: bold;
+            font-size: 18px;
+            color: #667eea;
+        }
+
+        .tva-input {
+            width: 60px;
+            padding: 5px;
+            border: 2px solid #667eea;
+            border-radius: 5px;
+            text-align: center;
+            font-weight: bold;
+            color: #667eea;
+            margin: 0 5px;
+        }
+
+        .tva-note {
+            font-size: 11px;
+            color: #666;
+            font-style: italic;
+            margin-top: 5px;
+        }
+
+        .notes-section {
+            margin: 20px 0;
+        }
+
+        .notes-section textarea {
+            width: 100%;
+            min-height: 100px;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: inherit;
+        }
+
+        .conditions {
+            background: #f8f9ff;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .conditions h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+
+        .conditions-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .condition-group h4 {
+            color: #764ba2;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .checkbox-group {
+            margin: 5px 0;
+        }
+
+        .checkbox-group label {
+            display: flex;
+            align-items: center;
+            font-size: 13px;
+            cursor: pointer;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            margin-right: 8px;
+            cursor: pointer;
+        }
+
+        .conditions p {
+            font-size: 12px;
+            color: #666;
+            line-height: 1.6;
+            margin: 5px 0;
+        }
+
+        .delivery-section {
+            background: #f8f9ff;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 4px solid #667eea;
+        }
+
+        .delivery-section h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+
+        .signature-section {
+            margin: 40px 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        .signature-box {
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .signature-box p {
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #667eea;
+            font-size: 16px;
+        }
+
+        .signature-pad {
+            width: 100%;
+            height: 150px;
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            cursor: crosshair;
+            background: white;
+            touch-action: none;
+        }
+
+        .signature-date {
+            margin-top: 15px;
+            text-align: center;
+        }
+
+        .signature-date label {
+            display: block;
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        .date-input {
+            padding: 8px 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 5px;
+            font-size: 14px;
+            color: #333;
+            background: white;
+            cursor: pointer;
+        }
+
+        .date-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .btn-small {
+            padding: 6px 15px;
+            border: none;
+            border-radius: 5px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-clear {
+            background: #f44336;
+            color: white;
+        }
+
+        .btn-clear:hover {
+            background: #da190b;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-print {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-print:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-csv {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .btn-csv:hover {
+            background: #45a049;
+            transform: translateY(-2px);
+        }
+
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            .container {
+                box-shadow: none;
+                padding: 20px;
+            }
+            .buttons, .btn-small, .logo-edit-note {
+                display: none !important;
+            }
+            .signature-pad {
+                border: 1px solid #333;
+            }
+            /* Masquer les lignes de produits avec quantité = 0 */
+            .products-table tr.empty-row {
+                display: none !important;
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideOut {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+        }
+
+        .info-field {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .info-field label {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        .info-field input, .info-field textarea {
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 5px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        .info-field input:focus, .info-field textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Titre et métadonnées EN HAUT -->
+        <div class="doc-title">
+            <h1>BON DE COMMANDE</h1>
+        </div>
+        <div class="doc-meta">
+            <div>
+                <strong>Date :</strong> 
+                <input type="date" id="dateCommande" class="date-input" style="margin-left: 10px;">
+            </div>
+            <div><strong>Référence :</strong> <span id="refCommande"></span></div>
+        </div>
+
+        <!-- Header -->
+        <div class="header">
+            <!-- Gauche : Soleky -->
+            <div class="header-left">
+                <div class="logo-section">
+                    <div id="logoContainer">
+                        <div class="logo-placeholder">SOLEKY</div>
+                    </div>
+                    <p class="logo-edit-note">💡 Modifiez le logo dans la section CONFIG_LOGO du script</p>
+                </div>
+                <div class="company-info">
+                    <strong>Soleky</strong>
+                    Yellowfield Organic Products<br>
+                    Ahrmou 1, ancienne route de Yamoussoukro<br>
+                    Abidjan, Côte d'Ivoire<br>
+                    <strong style="font-size: 13px;">RCCM:</strong> CI-ABJ-03-2022-B13-02595<br>
+                    📧 contact@soleky.com<br>
+                    📞 +225 07 07 18 42 93
+                </div>
+            </div>
+
+            <!-- Droite : Informations Client -->
+            <div class="header-right">
+                <div class="client-info-header">
+                    <h3>👤 Informations Client</h3>
+                    <div class="client-field">
+                        <label>Nom du client / Société *</label>
+                        <input type="text" id="clientNom" placeholder="Nom complet ou raison sociale">
+                    </div>
+                    <div class="client-field">
+                        <label>Adresse *</label>
+                        <input type="text" id="clientAdresse" placeholder="Adresse complète">
+                    </div>
+                    <div class="client-field">
+                        <label>Téléphone *</label>
+                        <input type="tel" id="clientTel" placeholder="+225...">
+                    </div>
+                    <div class="client-field">
+                        <label>Email *</label>
+                        <input type="email" id="clientEmail" placeholder="email@exemple.com">
+                    </div>
+                    <div class="client-field">
+                        <label>Contact / Référent</label>
+                        <input type="text" id="clientContact" placeholder="Nom du contact ou personne à contacter">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Produits -->
+        <div class="section">
+            <div class="section-title">🛒 Détails de la Commande (Vente en Gros)</div>
+            <table class="products-table">
+                <thead>
+                    <tr>
+                        <th>Réf</th>
+                        <th>Produit</th>
+                        <th>Format</th>
+                        <th>Parfum</th>
+                        <th>Qté Cartons</th>
+                        <th>Unités/Lot</th>
+                        <th>Prix Unit. (FCFA)</th>
+                        <th>Montant (FCFA)</th>
+                    </tr>
+                </thead>
+                <tbody id="productsTableBody"></tbody>
+            </table>
+        </div>
+
+        <!-- Totaux -->
+        <div class="total-section">
+            <div class="total-box">
+                <div class="total-row">
+                    <span>Sous-total HT :</span>
+                    <strong id="sousTotal">0 FCFA</strong>
+                </div>
+                <div class="total-row">
+                    <span>TVA (<input type="number" id="tauxTVA" class="tva-input" value="18" min="0" max="100" step="0.1">%) :</span>
+                    <strong id="tva">0 FCFA</strong>
+                </div>
+                <div class="tva-note">
+                    💡 Le taux de TVA varie selon le régime fiscal applicable en Côte d'Ivoire (modifiable ci-dessus)
+                </div>
+                <div class="total-row grand-total">
+                    <span>Total TTC :</span>
+                    <strong id="totalTTC">0 FCFA</strong>
+                </div>
+            </div>
+        </div>
+
+        <!-- Notes -->
+        <div class="section notes-section">
+            <div class="section-title">📌 Notes / Annotations / Texte libre</div>
+            <textarea id="notesLibres" placeholder="Ajoutez ici toute information complémentaire, remarques, instructions spéciales..."></textarea>
+        </div>
+
+        <!-- Conditions -->
+        <div class="conditions">
+            <h3>MODALITÉS DE COMMANDE</h3>
+            <div class="conditions-grid">
+                <div class="condition-group">
+                    <h4>Mode de paiement :</h4>
+                    <div class="checkbox-group">
+                        <label><input type="checkbox"> Virement bancaire (RIB communiqué sur facture)</label>
+                    </div>
+                    <div class="checkbox-group">
+                        <label><input type="checkbox"> Mobile money</label>
+                    </div>
+                    <div class="checkbox-group">
+                        <label><input type="checkbox"> Espèces / chèque (clients locaux agréés)</label>
+                    </div>
+                </div>
+                <div class="condition-group">
+                    <h4>Livraison :</h4>
+                    <div class="checkbox-group">
+                        <label><input type="checkbox"> À domicile / boutique</label>
+                    </div>
+                    <div class="checkbox-group">
+                        <label><input type="checkbox"> Enlèvement dépôt Abidjan</label>
+                    </div>
+                    <div class="checkbox-group">
+                        <label><input type="checkbox"> Export (Incoterm EXW / FOB selon volume)</label>
+                    </div>
+                </div>
+            </div>
+            <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #ddd;">
+                <p><strong>Délai estimé :</strong> 3 à 7 jours ouvrables après réception du paiement.</p>
+                <p><strong>Conditions générales :</strong> Produits certifiés BIO (ECOCERT, USDA, CI-BIO). Aucun échange après ouverture. Commande confirmée à validation du paiement de 50% d'acompte.</p>
+            </div>
+        </div>
+
+        <!-- Adresse de livraison -->
+        <div class="delivery-section">
+            <h3>📍 Adresse de Livraison</h3>
+            <textarea id="clientAdresseLivraison" placeholder="Indiquez l'adresse complète de livraison (si différente de l'adresse client)..." style="width: 100%; min-height: 100px; padding: 15px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 14px; font-family: inherit;"></textarea>
+        </div>
+
+        <!-- Signature Client uniquement -->
+        <div class="signature-section">
+            <div class="signature-box">
+                <p>✍️ Signature Client</p>
+                <canvas id="signatureClient" class="signature-pad"></canvas>
+                <div style="margin-top: 10px; display: flex; gap: 10px; justify-content: center;">
+                    <button class="btn-small btn-clear" onclick="clearSignature()">🗑️ Effacer</button>
+                </div>
+                <div class="signature-date">
+                    <label>Date de signature :</label>
+                    <input type="date" id="dateSignatureClient" class="date-input">
+                </div>
+                
+                <div id="cert-signature"></div>
+            </div>
+        </div>
+
+        <!-- Bouton de validation du BC -->
+        <div id="validate-bc-section" style="margin: 40px 0; text-align: center;">
+            <button id="validateBCButton" class="btn" style="background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%); color: white; font-size: 18px; padding: 18px 50px; box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);" onclick="validateBonDeCommande()">
+                ✅ VALIDER LE BON DE COMMANDE
+            </button>
+            <p style="font-size: 13px; color: #666; margin-top: 10px;">
+                Le document sera finalisé et prêt à être imprimé ou exporté
+            </p>
+        </div>
+
+        <!-- Boutons d'action (visibles uniquement après validation) -->
+        <div class="buttons" id="action-buttons" style="display: none;">
+            <button class="btn btn-print" onclick="window.print()">🖨️ Imprimer</button>
+            <button class="btn" style="background: #2196F3; color: white;" onclick="window.print()">📥 Télécharger PDF</button>
+            <button class="btn btn-csv" onclick="exportCSV()">📊 Exporter CSV</button>
+        </div>
+
+        <!-- Message de confirmation (après validation) -->
+        <div id="confirmation-message" style="display: none; margin: 30px 0; padding: 25px; background: #d4edda; border-left: 5px solid #28a745; border-radius: 10px;">
+            <h3 style="color: #155724; margin-bottom: 15px;">✅ Bon de commande validé avec succès !</h3>
+            <div style="color: #155724; line-height: 1.8;">
+                <p><strong>Référence :</strong> <span id="confirmed-ref"></span></p>
+                <p><strong>Client :</strong> <span id="confirmed-client"></span></p>
+                <p><strong>Montant TTC :</strong> <span id="confirmed-montant"></span></p>
+                <p style="margin-top: 15px;">📄 Vous pouvez maintenant imprimer ou exporter le bon de commande.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ========================================
+        // CONFIGURATION - MODIFIEZ ICI
+        // ========================================
+        
+        // 🎨 CONFIGURATION DU LOGO
+        const CONFIG_LOGO = {
+            // Option 1: URL d'une image hébergée en ligne
+            url: '', // Ex: 'https://votre-site.com/logo.png'
+            
+            // Option 2: Image en Base64 (pour intégrer directement dans le fichier)
+            base64: '', // Ex: 'data:image/png;base64,iVBORw0KGg...'
+            
+            // Dimensions
+            width: '150px',
+            height: '80px',
+            
+            // Texte alternatif si pas de logo
+            fallbackText: 'SOLEKY'
+        };
+
+        // 🔧 UNITÉS PAR LOT PAR DÉFAUT
+        const CONFIG_UNITES_LOT = {
+            'SK-001': 12,
+            'SK-002': 12,
+            'SK-003': 10,
+            'SK-004': 20,
+            'SK-005': 15,
+            'SK-006': 6
+        };
+
+        // 🔧 CATALOGUE PRODUITS
+        const PRODUCTS = [
+            {
+                ref: 'SK-001',
+                name: 'Beurre de karité bio pur',
+                formats: ['250 ml', '280 ml', '390 ml'],
+                parfums: ['Nature', 'Coco', 'Vanille'],
+                prices: {
+                    '250 ml': 7500,
+                    '280 ml': 8500,
+                    '390 ml': 11500
+                }
+            },
+            {
+                ref: 'SK-002',
+                name: 'Chantilly de karité',
+                formats: ['280 ml'],
+                parfums: ['Coco', 'Vanille', 'Nature'],
+                prices: { '280 ml': 9500 }
+            },
+            {
+                ref: 'SK-003',
+                name: 'Lait de karité hydratant',
+                formats: ['480 ml'],
+                parfums: ['Vanille', 'Fleur de thé blanc', 'Nature'],
+                prices: { '480 ml': 12000 }
+            },
+            {
+                ref: 'SK-004',
+                name: 'Huile de karité pure',
+                formats: ['50 ml'],
+                parfums: ['Fleur de thé blanc', 'Nature'],
+                prices: { '50 ml': 6500 }
+            },
+            {
+                ref: 'SK-005',
+                name: 'Savon doux au karité',
+                formats: ['300 g'],
+                parfums: ['Nature', 'Coco', 'Vanille'],
+                prices: { '300 g': 4500 }
+            },
+            {
+                ref: 'SK-006',
+                name: 'Coffret découverte "Soleky Ritual"',
+                formats: ['Coffret 5 pièces'],
+                parfums: ['Mix parfums'],
+                prices: { 'Coffret 5 pièces': 35000 }
+            }
+        ];
+
+        // ========================================
+        // INITIALISATION
+        // ========================================
+
+        let signaturePad = null;
+        let signatureData = {
+            signed: false,
+            timestamp: null,
+            hash: null
+        };
+
+        function init() {
+            initLogo();
+            initDate();
+            initReference();
+            generateProductRows();
+            attachEventListeners();
+            initSignaturePad();
+        }
+
+        function initLogo() {
+            const logoContainer = document.getElementById('logoContainer');
+            
+            if (CONFIG_LOGO.url) {
+                // Logo depuis URL
+                logoContainer.innerHTML = `<img src="${CONFIG_LOGO.url}" alt="Logo Soleky" class="logo-image" style="width: ${CONFIG_LOGO.width}; height: ${CONFIG_LOGO.height};">`;
+            } else if (CONFIG_LOGO.base64) {
+                // Logo en Base64
+                logoContainer.innerHTML = `<img src="${CONFIG_LOGO.base64}" alt="Logo Soleky" class="logo-image" style="width: ${CONFIG_LOGO.width}; height: ${CONFIG_LOGO.height};">`;
+            } else {
+                // Texte par défaut
+                logoContainer.innerHTML = `<div class="logo-placeholder" style="width: ${CONFIG_LOGO.width}; height: ${CONFIG_LOGO.height};">${CONFIG_LOGO.fallbackText}</div>`;
+            }
+        }
+
+        function initDate() {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('dateCommande').value = today;
+            document.getElementById('dateSignatureClient').value = today;
+        }
+
+        function initReference() {
+            let counter = parseInt(localStorage.getItem('bcCounter') || '0');
+            counter++;
+            localStorage.setItem('bcCounter', counter);
+            document.getElementById('refCommande').textContent = `BC-${String(counter).padStart(3, '0')}`;
+        }
+
+        function generateProductRows() {
+            const tbody = document.getElementById('productsTableBody');
+            tbody.innerHTML = '';
+
+            PRODUCTS.forEach(product => {
+                const row = document.createElement('tr');
+                row.classList.add('product-row');
+                const defaultFormat = product.formats[0];
+                const defaultParfum = product.parfums[0];
+                const unitesLot = CONFIG_UNITES_LOT[product.ref] || 12;
+
+                row.innerHTML = `
+                    <td>${product.ref}</td>
+                    <td>${product.name}</td>
+                    <td>
+                        <select class="format-select" data-ref="${product.ref}">
+                            ${product.formats.map(f => `<option value="${f}">${f}</option>`).join('')}
+                        </select>
+                    </td>
+                    <td>
+                        <select class="parfum-select">
+                            ${product.parfums.map(p => `<option value="${p}">${p}</option>`).join('')}
+                        </select>
+                    </td>
+                    <td><input type="number" class="qty-input" min="0" value="0" data-ref="${product.ref}"></td>
+                    <td style="text-align: center; color: #666; font-weight: 600;">${unitesLot}</td>
+                    <td class="unit-price" data-ref="${product.ref}">${product.prices[defaultFormat].toLocaleString('fr-FR')}</td>
+                    <td class="total-price" data-ref="${product.ref}">0</td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function attachEventListeners() {
+            // Format change
+            document.querySelectorAll('.format-select').forEach(select => {
+                select.addEventListener('change', function() {
+                    const ref = this.dataset.ref;
+                    const product = PRODUCTS.find(p => p.ref === ref);
+                    const newPrice = product.prices[this.value];
+                    document.querySelector(`.unit-price[data-ref="${ref}"]`).textContent = 
+                        newPrice.toLocaleString('fr-FR');
+                    calculateTotals();
+                });
+            });
+
+            // Quantity change
+            document.querySelectorAll('.qty-input').forEach(input => {
+                input.addEventListener('input', function() {
+                    markEmptyRows();
+                    calculateTotals();
+                });
+            });
+
+            // TVA change
+            document.getElementById('tauxTVA').addEventListener('input', calculateTotals);
+        }
+
+        function markEmptyRows() {
+            document.querySelectorAll('.product-row').forEach(row => {
+                const qtyInput = row.querySelector('.qty-input');
+                if (qtyInput && parseInt(qtyInput.value) === 0) {
+                    row.classList.add('empty-row');
+                } else {
+                    row.classList.remove('empty-row');
+                }
+            });
+        }
+
+        function calculateTotals() {
+            let sousTotal = 0;
+
+            // Produits standards
+            document.querySelectorAll('.qty-input').forEach(input => {
+                const ref = input.dataset.ref;
+                const qtyCartons = parseInt(input.value) || 0;
+                const unitesLot = CONFIG_UNITES_LOT[ref] || 12;
+                const prixUnitaire = parseInt(document.querySelector(`.unit-price[data-ref="${ref}"]`).textContent.replace(/\s/g, ''));
+                
+                const montant = qtyCartons * unitesLot * prixUnitaire;
+                document.querySelector(`.total-price[data-ref="${ref}"]`).textContent = 
+                    montant.toLocaleString('fr-FR');
+                
+                sousTotal += montant;
+            });
+
+            const tauxTVA = parseFloat(document.getElementById('tauxTVA').value) || 0;
+            const tva = sousTotal * (tauxTVA / 100);
+            const totalTTC = sousTotal + tva;
+
+            document.getElementById('sousTotal').textContent = sousTotal.toLocaleString('fr-FR') + ' FCFA';
+            document.getElementById('tva').textContent = Math.round(tva).toLocaleString('fr-FR') + ' FCFA';
+            document.getElementById('totalTTC').textContent = Math.round(totalTTC).toLocaleString('fr-FR') + ' FCFA';
+        }
+
+        // ========================================
+        // SIGNATURE PAD
+        // ========================================
+
+        function initSignaturePad() {
+            const canvas = document.getElementById('signatureClient');
+            const ctx = canvas.getContext('2d');
+            
+            canvas.width = canvas.offsetWidth;
+            canvas.height = 150;
+            
+            let isDrawing = false;
+            let lastX = 0;
+            let lastY = 0;
+
+            ctx.strokeStyle = '#000';
+            ctx.lineWidth = 2;
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+
+            // Souris
+            canvas.addEventListener('mousedown', (e) => {
+                isDrawing = true;
+                const rect = canvas.getBoundingClientRect();
+                lastX = e.clientX - rect.left;
+                lastY = e.clientY - rect.top;
+            });
+
+            canvas.addEventListener('mousemove', (e) => {
+                if (!isDrawing) return;
+                const rect = canvas.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                ctx.beginPath();
+                ctx.moveTo(lastX, lastY);
+                ctx.lineTo(x, y);
+                ctx.stroke();
+                
+                lastX = x;
+                lastY = y;
+            });
+
+            canvas.addEventListener('mouseup', () => {
+                isDrawing = false;
+                secureSignature();
+            });
+
+            canvas.addEventListener('mouseleave', () => {
+                isDrawing = false;
+            });
+
+            // Tactile
+            canvas.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                isDrawing = true;
+                const rect = canvas.getBoundingClientRect();
+                const touch = e.touches[0];
+                lastX = touch.clientX - rect.left;
+                lastY = touch.clientY - rect.top;
+            });
+
+            canvas.addEventListener('touchmove', (e) => {
+                e.preventDefault();
+                if (!isDrawing) return;
+                const rect = canvas.getBoundingClientRect();
+                const touch = e.touches[0];
+                const x = touch.clientX - rect.left;
+                const y = touch.clientY - rect.top;
+                
+                ctx.beginPath();
+                ctx.moveTo(lastX, lastY);
+                ctx.lineTo(x, y);
+                ctx.stroke();
+                
+                lastX = x;
+                lastY = y;
+            });
+
+            canvas.addEventListener('touchend', (e) => {
+                e.preventDefault();
+                isDrawing = false;
+                secureSignature();
+            });
+
+            signaturePad = { canvas, ctx };
+        }
+
+        async function secureSignature() {
+            const canvas = signaturePad.canvas;
+            const signatureImage = canvas.toDataURL();
+            
+            const hash = await generateHash(signatureImage);
+            const timestamp = new Date().toISOString();
+            
+            signatureData = {
+                signed: true,
+                timestamp: timestamp,
+                hash: hash,
+                documentRef: document.getElementById('refCommande').textContent
+            };
+
+            displaySignatureCertificate();
+        }
+
+        async function generateHash(data) {
+            const encoder = new TextEncoder();
+            const dataBuffer = encoder.encode(data);
+            const hashBuffer = await crypto.subtle.digest('SHA-256', dataBuffer);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+            return hashHex.substring(0, 16);
+        }
+
+        function displaySignatureCertificate() {
+            const certDiv = document.getElementById('cert-signature');
+            
+            certDiv.innerHTML = `
+                <div style="font-size: 10px; color: #666; margin-top: 15px; padding: 12px; background: #f0f8ff; border-radius: 8px; border-left: 3px solid #4CAF50;">
+                    <div style="display: flex; align-items: center; gap: 5px; margin-bottom: 8px;">
+                        <span style="color: #4CAF50; font-size: 16px;">✓</span>
+                        <strong style="color: #4CAF50; font-size: 14px;">Signature sécurisée</strong>
+                    </div>
+                    <div><strong>Horodatage:</strong> ${new Date(signatureData.timestamp).toLocaleString('fr-FR')}</div>
+                    <div><strong>Hash:</strong> ${signatureData.hash}</div>
+                    <div><strong>Document:</strong> ${signatureData.documentRef}</div>
+                </div>
+            `;
+        }
+
+        function clearSignature() {
+            if (signaturePad) {
+                signaturePad.ctx.clearRect(0, 0, signaturePad.canvas.width, signaturePad.canvas.height);
+                signatureData = {
+                    signed: false,
+                    timestamp: null,
+                    hash: null
+                };
+                document.getElementById('cert-signature').innerHTML = '';
+            }
+        }
+
+        // ========================================
+        // VALIDATION DU BON DE COMMANDE
+        // ========================================
+
+        function validateBonDeCommande() {
+            if (!validateFormData()) return;
+            if (!signatureData.signed) {
+                showNotification('⚠️ Veuillez signer le bon de commande avant de valider', 'warning');
+                return;
+            }
+            
+            const validateBtn = document.getElementById('validateBCButton');
+            validateBtn.disabled = true;
+            validateBtn.textContent = '⏳ Validation en cours...';
+            
+            setTimeout(() => {
+                // Masquer le bouton de validation
+                document.getElementById('validate-bc-section').style.display = 'none';
+                
+                // Afficher le message de confirmation
+                const confirmMsg = document.getElementById('confirmation-message');
+                document.getElementById('confirmed-ref').textContent = document.getElementById('refCommande').textContent;
+                document.getElementById('confirmed-client').textContent = document.getElementById('clientNom').value;
+                document.getElementById('confirmed-montant').textContent = document.getElementById('totalTTC').textContent;
+                confirmMsg.style.display = 'block';
+                
+                // Afficher les boutons d'action
+                document.getElementById('action-buttons').style.display = 'flex';
+                
+                // Scroll vers le message
+                confirmMsg.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                
+                showNotification('✅ Bon de commande validé avec succès !', 'success');
+            }, 1000);
+        }
+
+        function validateFormData() {
+            const clientNom = document.getElementById('clientNom').value;
+            const clientEmail = document.getElementById('clientEmail').value;
+            const clientTel = document.getElementById('clientTel').value;
+            
+            if (!clientNom || !clientEmail || !clientTel) {
+                showNotification('⚠️ Veuillez renseigner toutes les informations client obligatoires', 'warning');
+                return false;
+            }
+            
+            let hasProducts = false;
+            document.querySelectorAll('.qty-input').forEach(input => {
+                if (parseInt(input.value) > 0) {
+                    hasProducts = true;
+                }
+            });
+            
+            if (!hasProducts) {
+                showNotification('⚠️ Veuillez ajouter au moins un produit à la commande', 'warning');
+                return false;
+            }
+            
+            return true;
+        }
+
+        // ========================================
+        // EXPORT CSV
+        // ========================================
+
+        function exportCSV() {
+            const ref = document.getElementById('refCommande').textContent;
+            const date = new Date().toISOString().split('T')[0].replace(/-/g, '');
+            const filename = `bon_commande_soleky_${ref}_${date}.csv`;
+
+            let csv = 'Réf,Produit,Format,Parfum,Qté Cartons,Unités/Lot,Prix Unit. (FCFA),Montant (FCFA)\n';
+
+            // Produits standards
+            document.querySelectorAll('.qty-input').forEach(input => {
+                const ref = input.dataset.ref;
+                const qtyCartons = input.value;
+                if (qtyCartons > 0) {
+                    const row = input.closest('tr');
+                    const product = PRODUCTS.find(p => p.ref === ref);
+                    const format = row.querySelector('.format-select').value;
+                    const parfum = row.querySelector('.parfum-select').value;
+                    const unitesLot = CONFIG_UNITES_LOT[ref] || 12;
+                    const prixUnit = row.querySelector('.unit-price').textContent;
+                    const montant = row.querySelector('.total-price').textContent;
+
+                    csv += `${ref},"${product.name}",${format},${parfum},${qtyCartons},${unitesLot},${prixUnit},${montant}\n`;
+                }
+            });
+
+            const tauxTVA = document.getElementById('tauxTVA').value;
+            csv += '\n,,,,,,Sous-total HT,' + document.getElementById('sousTotal').textContent + '\n';
+            csv += `,,,,,,TVA (${tauxTVA}%),` + document.getElementById('tva').textContent + '\n';
+            csv += ',,,,,,Total TTC,' + document.getElementById('totalTTC').textContent + '\n';
+
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = filename;
+            link.click();
+            
+            showNotification('✅ Export CSV téléchargé !', 'success');
+        }
+
+        // ========================================
+        // NOTIFICATIONS
+        // ========================================
+
+        function showNotification(message, type) {
+            const colors = {
+                success: '#4CAF50',
+                error: '#f44336',
+                warning: '#ff9800',
+                info: '#2196F3'
+            };
+            
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: ${colors[type]};
+                color: white;
+                padding: 15px 20px;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+                z-index: 10000;
+                font-size: 14px;
+                animation: slideIn 0.3s ease;
+            `;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => notification.remove(), 300);
+            }, 4000);
+        }
+
+        // Démarrage
+        window.onload = init;
+    </script>
+</body>
+</html>
