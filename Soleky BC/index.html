@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="fr">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -24,7 +23,7 @@
             margin: 0 auto;
             background: white;
             border-radius: 15px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
             padding: 40px;
         }
 
@@ -456,22 +455,16 @@
                 background: white;
                 padding: 0;
             }
-
             .container {
                 box-shadow: none;
                 padding: 20px;
             }
-
-            .buttons,
-            .btn-small,
-            .logo-edit-note {
+            .buttons, .btn-small, .logo-edit-note {
                 display: none !important;
             }
-
             .signature-pad {
                 border: 1px solid #333;
             }
-
             /* Masquer les lignes de produits avec quantité = 0 */
             .products-table tr.empty-row {
                 display: none !important;
@@ -483,7 +476,6 @@
                 transform: translateX(400px);
                 opacity: 0;
             }
-
             to {
                 transform: translateX(0);
                 opacity: 1;
@@ -495,7 +487,6 @@
                 transform: translateX(0);
                 opacity: 1;
             }
-
             to {
                 transform: translateX(400px);
                 opacity: 0;
@@ -514,8 +505,7 @@
             font-weight: 600;
         }
 
-        .info-field input,
-        .info-field textarea {
+        .info-field input, .info-field textarea {
             padding: 10px;
             border: 2px solid #e0e0e0;
             border-radius: 5px;
@@ -523,14 +513,12 @@
             transition: border-color 0.3s;
         }
 
-        .info-field input:focus,
-        .info-field textarea:focus {
+        .info-field input:focus, .info-field textarea:focus {
             outline: none;
             border-color: #667eea;
         }
     </style>
 </head>
-
 <body>
     <div class="container">
         <!-- Titre et métadonnées EN HAUT -->
@@ -539,7 +527,7 @@
         </div>
         <div class="doc-meta">
             <div>
-                <strong>Date :</strong>
+                <strong>Date :</strong> 
                 <input type="date" id="dateCommande" class="date-input" style="margin-left: 10px;">
             </div>
             <div><strong>Référence :</strong> <span id="refCommande"></span></div>
@@ -622,8 +610,7 @@
                     <strong id="sousTotal">0 FCFA</strong>
                 </div>
                 <div class="total-row">
-                    <span>TVA (<input type="number" id="tauxTVA" class="tva-input" value="18" min="0" max="100"
-                            step="0.1">%) :</span>
+                    <span>TVA (<input type="number" id="tauxTVA" class="tva-input" value="18" min="0" max="100" step="0.1">%) :</span>
                     <strong id="tva">0 FCFA</strong>
                 </div>
                 <div class="tva-note">
@@ -639,8 +626,7 @@
         <!-- Notes -->
         <div class="section notes-section">
             <div class="section-title">📌 Notes / Annotations / Texte libre</div>
-            <textarea id="notesLibres"
-                placeholder="Ajoutez ici toute information complémentaire, remarques, instructions spéciales..."></textarea>
+            <textarea id="notesLibres" placeholder="Ajoutez ici toute information complémentaire, remarques, instructions spéciales..."></textarea>
         </div>
 
         <!-- Conditions -->
@@ -674,17 +660,14 @@
             </div>
             <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #ddd;">
                 <p><strong>Délai estimé :</strong> 3 à 7 jours ouvrables après réception du paiement.</p>
-                <p><strong>Conditions générales :</strong> Produits certifiés BIO (ECOCERT, USDA, CI-BIO). Aucun échange
-                    après ouverture. Commande confirmée à validation du paiement de 50% d'acompte.</p>
+                <p><strong>Conditions générales :</strong> Produits certifiés BIO (ECOCERT, USDA, CI-BIO). Aucun échange après ouverture. Commande confirmée à validation du paiement de 50% d'acompte.</p>
             </div>
         </div>
 
         <!-- Adresse de livraison -->
         <div class="delivery-section">
             <h3>📍 Adresse de Livraison</h3>
-            <textarea id="clientAdresseLivraison"
-                placeholder="Indiquez l'adresse complète de livraison (si différente de l'adresse client)..."
-                style="width: 100%; min-height: 100px; padding: 15px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 14px; font-family: inherit;"></textarea>
+            <textarea id="clientAdresseLivraison" placeholder="Indiquez l'adresse complète de livraison (si différente de l'adresse client)..." style="width: 100%; min-height: 100px; padding: 15px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 14px; font-family: inherit;"></textarea>
         </div>
 
         <!-- Signature Client uniquement -->
@@ -699,16 +682,14 @@
                     <label>Date de signature :</label>
                     <input type="date" id="dateSignatureClient" class="date-input">
                 </div>
-
+                
                 <div id="cert-signature"></div>
             </div>
         </div>
 
         <!-- Bouton de validation du BC -->
         <div id="validate-bc-section" style="margin: 40px 0; text-align: center;">
-            <button id="validateBCButton" class="btn"
-                style="background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%); color: white; font-size: 18px; padding: 18px 50px; box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);"
-                onclick="validateBonDeCommande()">
+            <button id="validateBCButton" class="btn" style="background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%); color: white; font-size: 18px; padding: 18px 50px; box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);" onclick="validateBonDeCommande()">
                 ✅ VALIDER LE BON DE COMMANDE
             </button>
             <p style="font-size: 13px; color: #666; margin-top: 10px;">
@@ -719,14 +700,12 @@
         <!-- Boutons d'action (visibles uniquement après validation) -->
         <div class="buttons" id="action-buttons" style="display: none;">
             <button class="btn btn-print" onclick="window.print()">🖨️ Imprimer</button>
-            <button class="btn" style="background: #2196F3; color: white;" onclick="window.print()">📥 Télécharger
-                PDF</button>
+            <button class="btn" style="background: #2196F3; color: white;" onclick="window.print()">📥 Télécharger PDF</button>
             <button class="btn btn-csv" onclick="exportCSV()">📊 Exporter CSV</button>
         </div>
 
         <!-- Message de confirmation (après validation) -->
-        <div id="confirmation-message"
-            style="display: none; margin: 30px 0; padding: 25px; background: #d4edda; border-left: 5px solid #28a745; border-radius: 10px;">
+        <div id="confirmation-message" style="display: none; margin: 30px 0; padding: 25px; background: #d4edda; border-left: 5px solid #28a745; border-radius: 10px;">
             <h3 style="color: #155724; margin-bottom: 15px;">✅ Bon de commande validé avec succès !</h3>
             <div style="color: #155724; line-height: 1.8;">
                 <p><strong>Référence :</strong> <span id="confirmed-ref"></span></p>
@@ -741,19 +720,19 @@
         // ========================================
         // CONFIGURATION - MODIFIEZ ICI
         // ========================================
-
+        
         // 🎨 CONFIGURATION DU LOGO
         const CONFIG_LOGO = {
             // Option 1: URL d'une image hébergée en ligne
             url: '', // Ex: 'https://votre-site.com/logo.png'
-
+            
             // Option 2: Image en Base64 (pour intégrer directement dans le fichier)
             base64: '', // Ex: 'data:image/png;base64,iVBORw0KGg...'
-
+            
             // Dimensions
             width: '150px',
             height: '80px',
-
+            
             // Texte alternatif si pas de logo
             fallbackText: 'SOLEKY'
         };
@@ -840,7 +819,7 @@
 
         function initLogo() {
             const logoContainer = document.getElementById('logoContainer');
-
+            
             if (CONFIG_LOGO.url) {
                 // Logo depuis URL
                 logoContainer.innerHTML = `<img src="${CONFIG_LOGO.url}" alt="Logo Soleky" class="logo-image" style="width: ${CONFIG_LOGO.width}; height: ${CONFIG_LOGO.height};">`;
@@ -859,11 +838,32 @@
             document.getElementById('dateSignatureClient').value = today;
         }
 
-        function initReference() {
-            let counter = parseInt(localStorage.getItem('bcCounter') || '0');
-            counter++;
-            localStorage.setItem('bcCounter', counter);
-            document.getElementById('refCommande').textContent = `BC-${String(counter).padStart(3, '0')}`;
+        async function initReference() {
+            try {
+                // Workflow 4 : Obtenir le prochain numéro BC depuis n8n/Google Sheets
+                const response = await fetch('https://n8n.lelabodelite.com/webhook-test/get-next-bc-soleky');
+                
+                if (response.ok) {
+                    const result = await response.json();
+                    document.getElementById('refCommande').textContent = result.bcNumber;
+                    console.log('✅ Numéro BC obtenu depuis n8n:', result.bcNumber);
+                } else {
+                    // Fallback : utiliser le compteur local si n8n ne répond pas
+                    console.warn('⚠️ n8n non disponible, utilisation du compteur local');
+                    let counter = parseInt(localStorage.getItem('bcCounter') || '0');
+                    counter++;
+                    localStorage.setItem('bcCounter', counter);
+                    document.getElementById('refCommande').textContent = `BC-${String(counter).padStart(3, '0')}`;
+                }
+            } catch (error) {
+                // Fallback en cas d'erreur réseau
+                console.error('❌ Erreur connexion n8n:', error);
+                console.warn('⚠️ Utilisation du compteur local');
+                let counter = parseInt(localStorage.getItem('bcCounter') || '0');
+                counter++;
+                localStorage.setItem('bcCounter', counter);
+                document.getElementById('refCommande').textContent = `BC-${String(counter).padStart(3, '0')}`;
+            }
         }
 
         function generateProductRows() {
@@ -902,11 +902,11 @@
         function attachEventListeners() {
             // Format change
             document.querySelectorAll('.format-select').forEach(select => {
-                select.addEventListener('change', function () {
+                select.addEventListener('change', function() {
                     const ref = this.dataset.ref;
                     const product = PRODUCTS.find(p => p.ref === ref);
                     const newPrice = product.prices[this.value];
-                    document.querySelector(`.unit-price[data-ref="${ref}"]`).textContent =
+                    document.querySelector(`.unit-price[data-ref="${ref}"]`).textContent = 
                         newPrice.toLocaleString('fr-FR');
                     calculateTotals();
                 });
@@ -914,7 +914,7 @@
 
             // Quantity change
             document.querySelectorAll('.qty-input').forEach(input => {
-                input.addEventListener('input', function () {
+                input.addEventListener('input', function() {
                     markEmptyRows();
                     calculateTotals();
                 });
@@ -944,11 +944,11 @@
                 const qtyCartons = parseInt(input.value) || 0;
                 const unitesLot = CONFIG_UNITES_LOT[ref] || 12;
                 const prixUnitaire = parseInt(document.querySelector(`.unit-price[data-ref="${ref}"]`).textContent.replace(/\s/g, ''));
-
+                
                 const montant = qtyCartons * unitesLot * prixUnitaire;
-                document.querySelector(`.total-price[data-ref="${ref}"]`).textContent =
+                document.querySelector(`.total-price[data-ref="${ref}"]`).textContent = 
                     montant.toLocaleString('fr-FR');
-
+                
                 sousTotal += montant;
             });
 
@@ -968,10 +968,10 @@
         function initSignaturePad() {
             const canvas = document.getElementById('signatureClient');
             const ctx = canvas.getContext('2d');
-
+            
             canvas.width = canvas.offsetWidth;
             canvas.height = 150;
-
+            
             let isDrawing = false;
             let lastX = 0;
             let lastY = 0;
@@ -994,12 +994,12 @@
                 const rect = canvas.getBoundingClientRect();
                 const x = e.clientX - rect.left;
                 const y = e.clientY - rect.top;
-
+                
                 ctx.beginPath();
                 ctx.moveTo(lastX, lastY);
                 ctx.lineTo(x, y);
                 ctx.stroke();
-
+                
                 lastX = x;
                 lastY = y;
             });
@@ -1030,12 +1030,12 @@
                 const touch = e.touches[0];
                 const x = touch.clientX - rect.left;
                 const y = touch.clientY - rect.top;
-
+                
                 ctx.beginPath();
                 ctx.moveTo(lastX, lastY);
                 ctx.lineTo(x, y);
                 ctx.stroke();
-
+                
                 lastX = x;
                 lastY = y;
             });
@@ -1052,10 +1052,10 @@
         async function secureSignature() {
             const canvas = signaturePad.canvas;
             const signatureImage = canvas.toDataURL();
-
+            
             const hash = await generateHash(signatureImage);
             const timestamp = new Date().toISOString();
-
+            
             signatureData = {
                 signed: true,
                 timestamp: timestamp,
@@ -1077,7 +1077,7 @@
 
         function displaySignatureCertificate() {
             const certDiv = document.getElementById('cert-signature');
-
+            
             certDiv.innerHTML = `
                 <div style="font-size: 10px; color: #666; margin-top: 15px; padding: 12px; background: #f0f8ff; border-radius: 8px; border-left: 3px solid #4CAF50;">
                     <div style="display: flex; align-items: center; gap: 5px; margin-bottom: 8px;">
@@ -1113,28 +1113,31 @@
                 showNotification('⚠️ Veuillez signer le bon de commande avant de valider', 'warning');
                 return;
             }
-
+            
             const validateBtn = document.getElementById('validateBCButton');
             validateBtn.disabled = true;
             validateBtn.textContent = '⏳ Validation en cours...';
-
+            
+            // Envoyer l'accusé de réception via n8n
+            sendAccuseReceptionViaEmail();
+            
             setTimeout(() => {
                 // Masquer le bouton de validation
                 document.getElementById('validate-bc-section').style.display = 'none';
-
+                
                 // Afficher le message de confirmation
                 const confirmMsg = document.getElementById('confirmation-message');
                 document.getElementById('confirmed-ref').textContent = document.getElementById('refCommande').textContent;
                 document.getElementById('confirmed-client').textContent = document.getElementById('clientNom').value;
                 document.getElementById('confirmed-montant').textContent = document.getElementById('totalTTC').textContent;
                 confirmMsg.style.display = 'block';
-
+                
                 // Afficher les boutons d'action
                 document.getElementById('action-buttons').style.display = 'flex';
-
+                
                 // Scroll vers le message
                 confirmMsg.scrollIntoView({ behavior: 'smooth', block: 'center' });
-
+                
                 showNotification('✅ Bon de commande validé avec succès !', 'success');
             }, 1000);
         }
@@ -1143,24 +1146,24 @@
             const clientNom = document.getElementById('clientNom').value;
             const clientEmail = document.getElementById('clientEmail').value;
             const clientTel = document.getElementById('clientTel').value;
-
+            
             if (!clientNom || !clientEmail || !clientTel) {
                 showNotification('⚠️ Veuillez renseigner toutes les informations client obligatoires', 'warning');
                 return false;
             }
-
+            
             let hasProducts = false;
             document.querySelectorAll('.qty-input').forEach(input => {
                 if (parseInt(input.value) > 0) {
                     hasProducts = true;
                 }
             });
-
+            
             if (!hasProducts) {
                 showNotification('⚠️ Veuillez ajouter au moins un produit à la commande', 'warning');
                 return false;
             }
-
+            
             return true;
         }
 
@@ -1202,8 +1205,106 @@
             link.href = URL.createObjectURL(blob);
             link.download = filename;
             link.click();
-
+            
             showNotification('✅ Export CSV téléchargé !', 'success');
+        }
+
+        // ========================================
+        // INTÉGRATION N8N - ENVOI EMAILS
+        // ========================================
+
+        async function sendAccuseReceptionViaEmail() {
+            const docRef = document.getElementById('refCommande').textContent;
+            const clientEmail = document.getElementById('clientEmail').value;
+            const clientNom = document.getElementById('clientNom').value;
+            const clientTel = document.getElementById('clientTel').value;
+            const clientAdresse = document.getElementById('clientAdresse').value;
+            const dateCommande = document.getElementById('dateCommande').value;
+            const totalTTC = document.getElementById('totalTTC').textContent;
+            const soustotalHT = document.getElementById('sousTotal').textContent;
+            const tva = document.getElementById('tva').textContent;
+            const adresseLivraison = document.getElementById('clientAdresseLivraison').value;
+
+            // Collecter les produits commandés
+            let produits = [];
+            document.querySelectorAll('.qty-input').forEach(input => {
+                const qty = parseInt(input.value);
+                if (qty > 0) {
+                    const ref = input.dataset.ref;
+                    const row = input.closest('tr');
+                    const product = PRODUCTS.find(p => p.ref === ref);
+                    const format = row.querySelector('.format-select').value;
+                    const parfum = row.querySelector('.parfum-select').value;
+                    const unitesLot = CONFIG_UNITES_LOT[ref] || 12;
+                    
+                    produits.push({
+                        ref: ref,
+                        nom: product.name,
+                        format: format,
+                        parfum: parfum,
+                        qtyCartons: qty,
+                        unitesLot: unitesLot
+                    });
+                }
+            });
+
+            const dataToSend = {
+                documentRef: docRef,
+                clientEmail: clientEmail,
+                clientNom: clientNom,
+                clientTel: clientTel,
+                clientAdresse: clientAdresse,
+                dateCommande: dateCommande,
+                totalTTC: totalTTC,
+                soustotalHT: soustotalHT,
+                tva: tva,
+                adresseLivraison: adresseLivraison || clientAdresse,
+                produits: produits,
+                signatureHash: signatureData.hash,
+                signatureTimestamp: signatureData.timestamp
+            };
+
+            try {
+                // Workflow 2 : Accusé de réception
+                const response = await fetch('https://n8n.lelabodelite.com/webhook-test/accuse-reception-soleky', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(dataToSend)
+                });
+
+                if (response.ok) {
+                    console.log('✅ Accusé de réception envoyé avec succès');
+                    
+                    // Workflow 3 : Sauvegarde dans Google Sheets
+                    await saveToGoogleSheets(dataToSend);
+                } else {
+                    console.error('❌ Erreur lors de l\'envoi de l\'accusé:', response.status);
+                }
+            } catch (error) {
+                console.error('❌ Erreur connexion n8n:', error);
+            }
+        }
+
+        async function saveToGoogleSheets(data) {
+            try {
+                const response = await fetch('https://n8n.lelabodelite.com/webhook-test/save-bc-soleky', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                if (response.ok) {
+                    console.log('✅ BC sauvegardé dans Google Sheets');
+                } else {
+                    console.error('❌ Erreur sauvegarde Google Sheets:', response.status);
+                }
+            } catch (error) {
+                console.error('❌ Erreur connexion Google Sheets:', error);
+            }
         }
 
         // ========================================
@@ -1217,7 +1318,7 @@
                 warning: '#ff9800',
                 info: '#2196F3'
             };
-
+            
             const notification = document.createElement('div');
             notification.style.cssText = `
                 position: fixed;
@@ -1234,7 +1335,7 @@
             `;
             notification.textContent = message;
             document.body.appendChild(notification);
-
+            
             setTimeout(() => {
                 notification.style.animation = 'slideOut 0.3s ease';
                 setTimeout(() => notification.remove(), 300);
@@ -1245,5 +1346,4 @@
         window.onload = init;
     </script>
 </body>
-
 </html>
