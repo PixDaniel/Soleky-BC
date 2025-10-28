@@ -1287,7 +1287,7 @@
 
             try {
                 // Workflow 2 : Accusé de réception
-                const response = await fetch('https://n8n.lelabodelite.com/webhook-test/accuse-reception-soleky', {
+                const response = await fetch('https://n8n.lelabodelite.com/webhook-test/email-otp-soleky', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -1310,7 +1310,7 @@
 
         async function saveToGoogleSheets(data) {
             try {
-                const response = await fetch('https://n8n.lelabodelite.com/webhook-test/email-otp-soleky', {
+                const response = await fetch('https://n8n.lelabodelite.com/webhook-test/save-bc-soleky', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
