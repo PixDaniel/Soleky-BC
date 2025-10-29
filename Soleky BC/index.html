@@ -704,8 +704,53 @@
             </div>
         </div>
 
-        <!-- Bouton de validation du BC -->
-        <div id="validate-bc-section" style="margin: 40px 0; text-align: center;">
+        <!-- Section validation OTP (affichée après signature) -->
+        <div id="otp-section"
+            style="display: none; margin: 40px 0; padding: 30px; background: #f8f9ff; border-radius: 15px; border: 2px solid #667eea;">
+            <div style="text-align: center; margin-bottom: 25px;">
+                <h3 style="color: #667eea; margin-bottom: 10px;">🔐 Validation par Code OTP</h3>
+                <p style="color: #666; font-size: 14px;">
+                    Un code de sécurité a été envoyé à votre adresse email.<br>
+                    Veuillez le saisir ci-dessous pour valider votre signature.
+                </p>
+            </div>
+
+            <div style="max-width: 400px; margin: 0 auto;">
+                <div style="display: flex; gap: 15px; margin-bottom: 20px;">
+                    <input type="text" id="otpInput" placeholder="Entrez le code à 6 chiffres" maxlength="6"
+                        style="flex: 1; padding: 15px; font-size: 20px; text-align: center; letter-spacing: 5px; border: 2px solid #667eea; border-radius: 8px; font-weight: bold;">
+                    <button id="verifyOtpButton" class="btn"
+                        style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 15px 30px; white-space: nowrap;"
+                        onclick="verifyOTP()">
+                        ✓ Vérifier
+                    </button>
+                </div>
+
+                <div style="text-align: center;">
+                    <button id="resendOtpButton" class="btn"
+                        style="background: transparent; color: #667eea; border: 2px solid #667eea; padding: 10px 25px; font-size: 14px;"
+                        onclick="resendOTP()">
+                        🔄 Renvoyer le code
+                    </button>
+                    <p style="font-size: 12px; color: #999; margin-top: 10px;">
+                        Code valable pendant 10 minutes
+                    </p>
+                </div>
+
+                <div id="otp-error"
+                    style="display: none; margin-top: 15px; padding: 12px; background: #fee; border-left: 3px solid #f44336; border-radius: 5px; color: #c62828;">
+                    ❌ Code incorrect. Veuillez réessayer.
+                </div>
+
+                <div id="otp-success"
+                    style="display: none; margin-top: 15px; padding: 12px; background: #e8f5e9; border-left: 3px solid #4CAF50; border-radius: 5px; color: #2e7d32;">
+                    ✅ Code validé avec succès !
+                </div>
+            </div>
+        </div>
+
+        <!-- Bouton de validation du BC (masqué jusqu'à validation OTP) -->
+        <div id="validate-bc-section" style="display: none; margin: 40px 0; text-align: center;">
             <button id="validateBCButton" class="btn"
                 style="background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%); color: white; font-size: 18px; padding: 18px 50px; box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);"
                 onclick="validateBonDeCommande()">
@@ -738,6 +783,23 @@
     </div>
 
     <script>
+        // ========================================
+        // CONFIGURATION & VARIABLES GLOBALES
+        // ========================================
+
+        let signaturePad = null;
+        let signatureData = {
+            signed: false,
+            timestamp: null,
+            hash: null,
+            documentRef: null
+        };
+
+        // Variables OTP
+        let currentOTPCode = null;
+        let otpTimestamp = null;
+        let otpValidated = false;
+
         // ========================================
         // CONFIGURATION - MODIFIEZ ICI
         // ========================================
@@ -1110,6 +1172,11 @@
                     <div><strong>Document:</strong> ${signatureData.documentRef}</div>
                 </div>
             `;
+
+            // Afficher la section OTP et envoyer le code
+            setTimeout(() => {
+                sendOTPCode();
+            }, 500);
         }
 
         function clearSignature() {
@@ -1121,8 +1188,162 @@
                     hash: null
                 };
                 document.getElementById('cert-signature').innerHTML = '';
+
+                // Masquer la section OTP
+                document.getElementById('otp-section').style.display = 'none';
+                document.getElementById('validate-bc-section').style.display = 'none';
+                otpValidated = false;
             }
         }
+
+        // ========================================
+        // SYSTÈME OTP (CODE DE VALIDATION)
+        // ========================================
+
+        async function sendOTPCode() {
+            const clientEmail = document.getElementById('clientEmail').value;
+
+            if (!clientEmail) {
+                showNotification('⚠️ Veuillez renseigner votre email avant de signer', 'warning');
+                return;
+            }
+
+            // Générer un code OTP à 6 chiffres
+            currentOTPCode = Math.floor(100000 + Math.random() * 900000).toString();
+            otpTimestamp = new Date();
+
+            console.log('🔐 Code OTP généré:', currentOTPCode); // Pour debug
+
+            const docRef = document.getElementById('refCommande').textContent;
+
+            try {
+                // Workflow 1 : Envoi du code OTP par email
+                const response = await fetch('https://n8n.lelabodelite.com/webhook-test/email-otp-soleky', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        email: clientEmail,
+                        code: currentOTPCode,
+                        documentRef: docRef,
+                        signatureType: 'client',
+                        subject: `[Soleky] Code de validation - ${docRef}`,
+                        message: `
+Bonjour,
+
+Vous venez de signer le bon de commande ${docRef}.
+Pour valider votre signature, veuillez saisir le code suivant :
+
+┌─────────────┐
+│   ${currentOTPCode}    │
+└─────────────┘
+
+Ce code est valable 10 minutes.
+
+Cordialement,
+L'équipe Soleky
+
+📧 contact@soleky.com
+📞 +225 07 07 18 42 93
+                        `
+                    })
+                });
+
+                if (response.ok) {
+                    console.log('✅ Code OTP envoyé par email');
+
+                    // Afficher la section OTP
+                    document.getElementById('otp-section').style.display = 'block';
+
+                    // Scroll vers la section OTP
+                    document.getElementById('otp-section').scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+                    showNotification('📧 Un code de validation a été envoyé à votre email', 'success');
+                } else {
+                    console.error('❌ Erreur envoi OTP:', response.status);
+                    showNotification('⚠️ Erreur lors de l\'envoi du code. Veuillez réessayer.', 'error');
+                }
+            } catch (error) {
+                console.error('❌ Erreur connexion n8n:', error);
+                showNotification('⚠️ Erreur de connexion. Vérifiez votre internet.', 'error');
+            }
+        }
+
+        async function verifyOTP() {
+            const inputCode = document.getElementById('otpInput').value.trim();
+
+            if (!inputCode) {
+                showNotification('⚠️ Veuillez saisir le code reçu par email', 'warning');
+                return;
+            }
+
+            if (inputCode.length !== 6) {
+                showNotification('⚠️ Le code doit contenir 6 chiffres', 'warning');
+                return;
+            }
+
+            // Vérifier l'expiration du code (10 minutes)
+            const now = new Date();
+            const timeDiff = (now - otpTimestamp) / 1000 / 60; // en minutes
+
+            if (timeDiff > 10) {
+                document.getElementById('otp-error').innerHTML = '❌ Code expiré. Veuillez demander un nouveau code.';
+                document.getElementById('otp-error').style.display = 'block';
+                document.getElementById('otp-success').style.display = 'none';
+                return;
+            }
+
+            // Vérifier le code
+            if (inputCode === currentOTPCode) {
+                // Code correct !
+                otpValidated = true;
+
+                document.getElementById('otp-error').style.display = 'none';
+                document.getElementById('otp-success').style.display = 'block';
+                document.getElementById('otpInput').disabled = true;
+                document.getElementById('verifyOtpButton').disabled = true;
+                document.getElementById('resendOtpButton').disabled = true;
+
+                showNotification('✅ Code validé avec succès !', 'success');
+
+                // Afficher le bouton de validation du BC après 1 seconde
+                setTimeout(() => {
+                    document.getElementById('validate-bc-section').style.display = 'block';
+                    document.getElementById('validate-bc-section').scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }, 1000);
+
+            } else {
+                // Code incorrect
+                document.getElementById('otp-error').style.display = 'block';
+                document.getElementById('otp-success').style.display = 'none';
+                showNotification('❌ Code incorrect. Veuillez réessayer.', 'error');
+            }
+        }
+
+        async function resendOTP() {
+            showNotification('🔄 Envoi d\'un nouveau code...', 'info');
+
+            // Réinitialiser le champ de saisie
+            document.getElementById('otpInput').value = '';
+            document.getElementById('otp-error').style.display = 'none';
+            document.getElementById('otp-success').style.display = 'none';
+
+            // Renvoyer le code
+            await sendOTPCode();
+        }
+
+        // Permettre la validation du code avec la touche Entrée
+        document.addEventListener('DOMContentLoaded', () => {
+            const otpInput = document.getElementById('otpInput');
+            if (otpInput) {
+                otpInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        verifyOTP();
+                    }
+                });
+            }
+        });
 
         // ========================================
         // VALIDATION DU BON DE COMMANDE
@@ -1132,6 +1353,10 @@
             if (!validateFormData()) return;
             if (!signatureData.signed) {
                 showNotification('⚠️ Veuillez signer le bon de commande avant de valider', 'warning');
+                return;
+            }
+            if (!otpValidated) {
+                showNotification('⚠️ Veuillez d\'abord valider le code OTP envoyé par email', 'warning');
                 return;
             }
 
