@@ -430,12 +430,17 @@
             transition: all 0.3s;
         }
 
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
         .btn-print {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
         }
 
-        .btn-print:hover {
+        .btn-print:hover:not(:disabled) {
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
         }
@@ -445,9 +450,105 @@
             color: white;
         }
 
-        .btn-csv:hover {
+        .btn-csv:hover:not(:disabled) {
             background: #45a049;
             transform: translateY(-2px);
+        }
+
+        /* Modal OTP */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 10% auto;
+            padding: 40px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            animation: slideUp 0.3s ease;
+        }
+
+        .modal-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .modal-header h2 {
+            color: #667eea;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .modal-header p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .otp-container {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .otp-inputs {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .otp-input {
+            width: 50px;
+            height: 60px;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+        .otp-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .otp-timer {
+            color: #666;
+            font-size: 14px;
+            margin: 15px 0;
+        }
+
+        .otp-timer.expired {
+            color: #f44336;
+        }
+
+        .resend-link {
+            color: #667eea;
+            cursor: pointer;
+            text-decoration: underline;
+            font-size: 14px;
+        }
+
+        .resend-link:hover {
+            color: #764ba2;
+        }
+
+        .resend-link.disabled {
+            color: #ccc;
+            cursor: not-allowed;
+            text-decoration: none;
         }
 
         @media print {
@@ -465,9 +566,27 @@
             .signature-pad {
                 border: 1px solid #333;
             }
-            /* Masquer les lignes de produits avec quantité = 0 */
             .products-table tr.empty-row {
                 display: none !important;
+            }
+            #validate-bc-section {
+                display: none !important;
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
             }
         }
 
@@ -517,11 +636,61 @@
             outline: none;
             border-color: #667eea;
         }
+
+        .success-message {
+            background: #d4edda;
+            border-left: 5px solid #28a745;
+            border-radius: 10px;
+            padding: 25px;
+            margin: 30px 0;
+            display: none;
+        }
+
+        .success-message h3 {
+            color: #155724;
+            margin-bottom: 15px;
+        }
+
+        .success-message p {
+            color: #155724;
+            line-height: 1.8;
+            margin: 10px 0;
+        }
+
+        .receipt-box {
+            background: white;
+            border: 2px dashed #28a745;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .receipt-box h4 {
+            color: #28a745;
+            margin-bottom: 15px;
+            text-align: center;
+            font-size: 18px;
+        }
+
+        .receipt-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .receipt-item:last-child {
+            border-bottom: none;
+        }
+
+        .receipt-item strong {
+            color: #155724;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- Titre et métadonnées EN HAUT -->
+        <!-- Titre et métadonnées -->
         <div class="doc-title">
             <h1>BON DE COMMANDE</h1>
         </div>
@@ -571,7 +740,7 @@
                         <input type="tel" id="clientTel" placeholder="+225...">
                     </div>
                     <div class="client-field">
-                        <label>Email *</label>
+                        <label>Email * (pour recevoir le code OTP)</label>
                         <input type="email" id="clientEmail" placeholder="email@exemple.com">
                     </div>
                     <div class="client-field">
@@ -670,7 +839,7 @@
             <textarea id="clientAdresseLivraison" placeholder="Indiquez l'adresse complète de livraison (si différente de l'adresse client)..." style="width: 100%; min-height: 100px; padding: 15px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 14px; font-family: inherit;"></textarea>
         </div>
 
-        <!-- Signature Client uniquement -->
+        <!-- Signature Client -->
         <div class="signature-section">
             <div class="signature-box">
                 <p>✍️ Signature Client</p>
@@ -687,57 +856,114 @@
             </div>
         </div>
 
-        <!-- Bouton de validation du BC -->
+        <!-- Bouton de demande OTP -->
         <div id="validate-bc-section" style="margin: 40px 0; text-align: center;">
-            <button id="validateBCButton" class="btn" style="background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%); color: white; font-size: 18px; padding: 18px 50px; box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);" onclick="validateBonDeCommande()">
-                ✅ VALIDER LE BON DE COMMANDE
+            <button id="validateBCButton" class="btn" style="background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%); color: white; font-size: 18px; padding: 18px 50px; box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);" onclick="requestOTP()">
+                🔒 DEMANDER LE CODE DE VALIDATION
             </button>
             <p style="font-size: 13px; color: #666; margin-top: 10px;">
-                Le document sera finalisé et prêt à être imprimé ou exporté
+                Un code OTP sera envoyé à votre adresse email pour valider la commande
             </p>
         </div>
 
-        <!-- Boutons d'action (visibles uniquement après validation) -->
+        <!-- Message de succès -->
+        <div id="confirmation-message" class="success-message">
+            <h3>✅ Commande validée avec succès !</h3>
+            <div class="receipt-box">
+                <h4>📋 ACCUSÉ DE RÉCEPTION</h4>
+                <div class="receipt-item">
+                    <span>Référence commande :</span>
+                    <strong id="confirmed-ref"></strong>
+                </div>
+                <div class="receipt-item">
+                    <span>Date de validation :</span>
+                    <strong id="confirmed-date"></strong>
+                </div>
+                <div class="receipt-item">
+                    <span>Client :</span>
+                    <strong id="confirmed-client"></strong>
+                </div>
+                <div class="receipt-item">
+                    <span>Email :</span>
+                    <strong id="confirmed-email"></strong>
+                </div>
+                <div class="receipt-item">
+                    <span>Montant total TTC :</span>
+                    <strong id="confirmed-montant" style="font-size: 18px; color: #28a745;"></strong>
+                </div>
+                <div style="margin-top: 20px; padding-top: 15px; border-top: 2px dashed #28a745; text-align: center;">
+                    <p style="color: #155724; font-size: 14px; line-height: 1.8;">
+                        <strong>✓ Votre commande a été enregistrée avec succès</strong><br>
+                        Un email de confirmation vous a été envoyé.<br>
+                        Nous vous contacterons sous 24h pour le paiement et la livraison.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Boutons d'action (visibles après validation) -->
         <div class="buttons" id="action-buttons" style="display: none;">
-            <button class="btn btn-print" onclick="window.print()">🖨️ Imprimer</button>
+            <button class="btn btn-print" onclick="window.print()">🖨️ Imprimer le reçu</button>
             <button class="btn" style="background: #2196F3; color: white;" onclick="window.print()">📥 Télécharger PDF</button>
             <button class="btn btn-csv" onclick="exportCSV()">📊 Exporter CSV</button>
         </div>
+    </div>
 
-        <!-- Message de confirmation (après validation) -->
-        <div id="confirmation-message" style="display: none; margin: 30px 0; padding: 25px; background: #d4edda; border-left: 5px solid #28a745; border-radius: 10px;">
-            <h3 style="color: #155724; margin-bottom: 15px;">✅ Bon de commande validé avec succès !</h3>
-            <div style="color: #155724; line-height: 1.8;">
-                <p><strong>Référence :</strong> <span id="confirmed-ref"></span></p>
-                <p><strong>Client :</strong> <span id="confirmed-client"></span></p>
-                <p><strong>Montant TTC :</strong> <span id="confirmed-montant"></span></p>
-                <p style="margin-top: 15px;">📄 Vous pouvez maintenant imprimer ou exporter le bon de commande.</p>
+    <!-- Modal OTP -->
+    <div id="otpModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>🔐 Validation par Code OTP</h2>
+                <p>Un code de vérification à 6 chiffres a été envoyé à :</p>
+                <p style="font-weight: bold; color: #667eea; margin-top: 10px;" id="emailDisplay"></p>
+            </div>
+            
+            <div class="otp-container">
+                <p style="color: #666; margin-bottom: 20px;">Entrez le code reçu par email :</p>
+                <div class="otp-inputs">
+                    <input type="text" maxlength="1" class="otp-input" id="otp1" />
+                    <input type="text" maxlength="1" class="otp-input" id="otp2" />
+                    <input type="text" maxlength="1" class="otp-input" id="otp3" />
+                    <input type="text" maxlength="1" class="otp-input" id="otp4" />
+                    <input type="text" maxlength="1" class="otp-input" id="otp5" />
+                    <input type="text" maxlength="1" class="otp-input" id="otp6" />
+                </div>
+                
+                <div class="otp-timer" id="otpTimer">
+                    ⏱️ Code valide pendant : <strong id="countdown">5:00</strong>
+                </div>
+                
+                <div style="margin: 20px 0;">
+                    <span class="resend-link" id="resendLink" onclick="resendOTP()">
+                        📧 Renvoyer le code
+                    </span>
+                </div>
+            </div>
+            
+            <div style="display: flex; gap: 15px; justify-content: center; margin-top: 30px;">
+                <button class="btn" style="background: #f44336; color: white;" onclick="closeOTPModal()">
+                    ❌ Annuler
+                </button>
+                <button class="btn" style="background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%); color: white;" onclick="verifyOTP()">
+                    ✓ Valider
+                </button>
             </div>
         </div>
     </div>
 
     <script>
         // ========================================
-        // CONFIGURATION - MODIFIEZ ICI
+        // CONFIGURATION
         // ========================================
         
-        // 🎨 CONFIGURATION DU LOGO
         const CONFIG_LOGO = {
-            // Option 1: URL d'une image hébergée en ligne
-            url: '', // Ex: 'https://votre-site.com/logo.png'
-            
-            // Option 2: Image en Base64 (pour intégrer directement dans le fichier)
-            base64: '', // Ex: 'data:image/png;base64,iVBORw0KGg...'
-            
-            // Dimensions
+            url: '',
+            base64: '',
             width: '150px',
             height: '80px',
-            
-            // Texte alternatif si pas de logo
             fallbackText: 'SOLEKY'
         };
 
-        // 🔧 UNITÉS PAR LOT PAR DÉFAUT
         const CONFIG_UNITES_LOT = {
             'SK-001': 12,
             'SK-002': 12,
@@ -747,7 +973,6 @@
             'SK-006': 6
         };
 
-        // 🔧 CATALOGUE PRODUITS
         const PRODUCTS = [
             {
                 ref: 'SK-001',
@@ -798,15 +1023,28 @@
         ];
 
         // ========================================
-        // INITIALISATION
+        // VARIABLES GLOBALES
         // ========================================
-
+        
         let signaturePad = null;
         let signatureData = {
             signed: false,
             timestamp: null,
             hash: null
         };
+        
+        let otpData = {
+            code: '',
+            generatedAt: null,
+            expiresAt: null,
+            verified: false
+        };
+        
+        let countdownInterval = null;
+
+        // ========================================
+        // INITIALISATION
+        // ========================================
 
         function init() {
             initLogo();
@@ -815,19 +1053,17 @@
             generateProductRows();
             attachEventListeners();
             initSignaturePad();
+            initOTPInputs();
         }
 
         function initLogo() {
             const logoContainer = document.getElementById('logoContainer');
             
             if (CONFIG_LOGO.url) {
-                // Logo depuis URL
                 logoContainer.innerHTML = `<img src="${CONFIG_LOGO.url}" alt="Logo Soleky" class="logo-image" style="width: ${CONFIG_LOGO.width}; height: ${CONFIG_LOGO.height};">`;
             } else if (CONFIG_LOGO.base64) {
-                // Logo en Base64
                 logoContainer.innerHTML = `<img src="${CONFIG_LOGO.base64}" alt="Logo Soleky" class="logo-image" style="width: ${CONFIG_LOGO.width}; height: ${CONFIG_LOGO.height};">`;
             } else {
-                // Texte par défaut
                 logoContainer.innerHTML = `<div class="logo-placeholder" style="width: ${CONFIG_LOGO.width}; height: ${CONFIG_LOGO.height};">${CONFIG_LOGO.fallbackText}</div>`;
             }
         }
@@ -879,7 +1115,6 @@
         }
 
         function attachEventListeners() {
-            // Format change
             document.querySelectorAll('.format-select').forEach(select => {
                 select.addEventListener('change', function() {
                     const ref = this.dataset.ref;
@@ -891,7 +1126,6 @@
                 });
             });
 
-            // Quantity change
             document.querySelectorAll('.qty-input').forEach(input => {
                 input.addEventListener('input', function() {
                     markEmptyRows();
@@ -899,7 +1133,6 @@
                 });
             });
 
-            // TVA change
             document.getElementById('tauxTVA').addEventListener('input', calculateTotals);
         }
 
@@ -917,7 +1150,6 @@
         function calculateTotals() {
             let sousTotal = 0;
 
-            // Produits standards
             document.querySelectorAll('.qty-input').forEach(input => {
                 const ref = input.dataset.ref;
                 const qtyCartons = parseInt(input.value) || 0;
@@ -941,7 +1173,7 @@
         }
 
         // ========================================
-        // SIGNATURE PAD
+        // SIGNATURE
         // ========================================
 
         function initSignaturePad() {
@@ -960,7 +1192,6 @@
             ctx.lineCap = 'round';
             ctx.lineJoin = 'round';
 
-            // Souris
             canvas.addEventListener('mousedown', (e) => {
                 isDrawing = true;
                 const rect = canvas.getBoundingClientRect();
@@ -992,7 +1223,6 @@
                 isDrawing = false;
             });
 
-            // Tactile
             canvas.addEventListener('touchstart', (e) => {
                 e.preventDefault();
                 isDrawing = true;
@@ -1083,28 +1313,210 @@
         }
 
         // ========================================
-        // VALIDATION DU BON DE COMMANDE
+        // SYSTÈME OTP
         // ========================================
 
-        function validateBonDeCommande() {
+        function initOTPInputs() {
+            const inputs = document.querySelectorAll('.otp-input');
+            
+            inputs.forEach((input, index) => {
+                input.addEventListener('input', function(e) {
+                    if (this.value.length === 1) {
+                        if (index < inputs.length - 1) {
+                            inputs[index + 1].focus();
+                        }
+                    }
+                });
+                
+                input.addEventListener('keydown', function(e) {
+                    if (e.key === 'Backspace' && this.value === '') {
+                        if (index > 0) {
+                            inputs[index - 1].focus();
+                        }
+                    }
+                });
+                
+                input.addEventListener('paste', function(e) {
+                    e.preventDefault();
+                    const pastedData = e.clipboardData.getData('text');
+                    const digits = pastedData.replace(/\D/g, '').slice(0, 6);
+                    
+                    digits.split('').forEach((digit, i) => {
+                        if (inputs[i]) {
+                            inputs[i].value = digit;
+                        }
+                    });
+                    
+                    if (digits.length === 6) {
+                        inputs[5].focus();
+                    }
+                });
+            });
+        }
+
+        function generateOTP() {
+            return Math.floor(100000 + Math.random() * 900000).toString();
+        }
+
+        function requestOTP() {
             if (!validateFormData()) return;
             if (!signatureData.signed) {
-                showNotification('⚠️ Veuillez signer le bon de commande avant de valider', 'warning');
+                showNotification('⚠️ Veuillez signer le bon de commande avant de continuer', 'warning');
                 return;
             }
             
+            const clientEmail = document.getElementById('clientEmail').value;
+            
+            // Générer le code OTP
+            const otp = generateOTP();
+            const now = new Date();
+            const expiresAt = new Date(now.getTime() + 5 * 60000); // 5 minutes
+            
+            otpData = {
+                code: otp,
+                generatedAt: now,
+                expiresAt: expiresAt,
+                verified: false
+            };
+            
+            // Simuler l'envoi d'email
+            console.log(`📧 Code OTP envoyé à ${clientEmail}: ${otp}`);
+            
+            // Afficher le modal
+            document.getElementById('emailDisplay').textContent = clientEmail;
+            document.getElementById('otpModal').style.display = 'block';
+            
+            // Démarrer le compte à rebours
+            startCountdown();
+            
+            // Afficher une notification avec le code (EN PRODUCTION, RETIRER CETTE LIGNE)
+            showNotification(`📧 Code OTP envoyé : ${otp} (visible uniquement en mode test)`, 'info', 8000);
+        }
+
+        function startCountdown() {
+            if (countdownInterval) {
+                clearInterval(countdownInterval);
+            }
+            
+            const countdownElement = document.getElementById('countdown');
+            const timerElement = document.getElementById('otpTimer');
+            
+            countdownInterval = setInterval(() => {
+                const now = new Date();
+                const timeLeft = otpData.expiresAt - now;
+                
+                if (timeLeft <= 0) {
+                    clearInterval(countdownInterval);
+                    countdownElement.textContent = '0:00';
+                    timerElement.classList.add('expired');
+                    timerElement.innerHTML = '⚠️ Code expiré - <span class="resend-link" onclick="resendOTP()">Demander un nouveau code</span>';
+                    return;
+                }
+                
+                const minutes = Math.floor(timeLeft / 60000);
+                const seconds = Math.floor((timeLeft % 60000) / 1000);
+                countdownElement.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            }, 1000);
+        }
+
+        function resendOTP() {
+            const resendLink = document.getElementById('resendLink');
+            if (resendLink.classList.contains('disabled')) {
+                return;
+            }
+            
+            // Désactiver temporairement le lien
+            resendLink.classList.add('disabled');
+            resendLink.textContent = '⏳ Envoi en cours...';
+            
+            setTimeout(() => {
+                // Générer un nouveau code
+                const otp = generateOTP();
+                const now = new Date();
+                const expiresAt = new Date(now.getTime() + 5 * 60000);
+                
+                otpData = {
+                    code: otp,
+                    generatedAt: now,
+                    expiresAt: expiresAt,
+                    verified: false
+                };
+                
+                // Réinitialiser le timer
+                const timerElement = document.getElementById('otpTimer');
+                timerElement.classList.remove('expired');
+                timerElement.innerHTML = '⏱️ Code valide pendant : <strong id="countdown">5:00</strong>';
+                
+                startCountdown();
+                
+                // Réactiver le lien
+                resendLink.classList.remove('disabled');
+                resendLink.textContent = '📧 Renvoyer le code';
+                
+                // Effacer les champs
+                document.querySelectorAll('.otp-input').forEach(input => input.value = '');
+                document.getElementById('otp1').focus();
+                
+                showNotification(`📧 Nouveau code envoyé : ${otp} (visible uniquement en mode test)`, 'info', 8000);
+            }, 1000);
+        }
+
+        function verifyOTP() {
+            const inputs = document.querySelectorAll('.otp-input');
+            const enteredCode = Array.from(inputs).map(input => input.value).join('');
+            
+            if (enteredCode.length !== 6) {
+                showNotification('⚠️ Veuillez entrer les 6 chiffres du code', 'warning');
+                return;
+            }
+            
+            const now = new Date();
+            
+            if (now > otpData.expiresAt) {
+                showNotification('⚠️ Le code a expiré. Demandez un nouveau code.', 'error');
+                return;
+            }
+            
+            if (enteredCode === otpData.code) {
+                otpData.verified = true;
+                closeOTPModal();
+                finalizeOrder();
+            } else {
+                showNotification('❌ Code incorrect. Veuillez réessayer.', 'error');
+                inputs.forEach(input => {
+                    input.value = '';
+                    input.style.borderColor = '#f44336';
+                });
+                setTimeout(() => {
+                    inputs.forEach(input => input.style.borderColor = '#e0e0e0');
+                }, 1000);
+                inputs[0].focus();
+            }
+        }
+
+        function closeOTPModal() {
+            document.getElementById('otpModal').style.display = 'none';
+            if (countdownInterval) {
+                clearInterval(countdownInterval);
+            }
+            document.querySelectorAll('.otp-input').forEach(input => input.value = '');
+        }
+
+        function finalizeOrder() {
             const validateBtn = document.getElementById('validateBCButton');
             validateBtn.disabled = true;
-            validateBtn.textContent = '⏳ Validation en cours...';
+            validateBtn.textContent = '⏳ Finalisation...';
             
             setTimeout(() => {
                 // Masquer le bouton de validation
                 document.getElementById('validate-bc-section').style.display = 'none';
                 
-                // Afficher le message de confirmation
+                // Afficher le message de succès avec accusé de réception
                 const confirmMsg = document.getElementById('confirmation-message');
                 document.getElementById('confirmed-ref').textContent = document.getElementById('refCommande').textContent;
+                document.getElementById('confirmed-date').textContent = new Date().toLocaleString('fr-FR');
                 document.getElementById('confirmed-client').textContent = document.getElementById('clientNom').value;
+                document.getElementById('confirmed-email').textContent = document.getElementById('clientEmail').value;
                 document.getElementById('confirmed-montant').textContent = document.getElementById('totalTTC').textContent;
                 confirmMsg.style.display = 'block';
                 
@@ -1114,17 +1526,25 @@
                 // Scroll vers le message
                 confirmMsg.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 
-                showNotification('✅ Bon de commande validé avec succès !', 'success');
-            }, 1000);
+                showNotification('✅ Commande validée avec succès ! Un email de confirmation vous a été envoyé.', 'success');
+            }, 1500);
         }
 
         function validateFormData() {
             const clientNom = document.getElementById('clientNom').value;
             const clientEmail = document.getElementById('clientEmail').value;
             const clientTel = document.getElementById('clientTel').value;
+            const clientAdresse = document.getElementById('clientAdresse').value;
             
-            if (!clientNom || !clientEmail || !clientTel) {
-                showNotification('⚠️ Veuillez renseigner toutes les informations client obligatoires', 'warning');
+            if (!clientNom || !clientEmail || !clientTel || !clientAdresse) {
+                showNotification('⚠️ Veuillez renseigner toutes les informations client obligatoires (*)', 'warning');
+                return false;
+            }
+            
+            // Validation email
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(clientEmail)) {
+                showNotification('⚠️ Veuillez entrer une adresse email valide', 'warning');
                 return false;
             }
             
@@ -1154,7 +1574,6 @@
 
             let csv = 'Réf,Produit,Format,Parfum,Qté Cartons,Unités/Lot,Prix Unit. (FCFA),Montant (FCFA)\n';
 
-            // Produits standards
             document.querySelectorAll('.qty-input').forEach(input => {
                 const ref = input.dataset.ref;
                 const qtyCartons = input.value;
@@ -1189,7 +1608,7 @@
         // NOTIFICATIONS
         // ========================================
 
-        function showNotification(message, type) {
+        function showNotification(message, type, duration = 4000) {
             const colors = {
                 success: '#4CAF50',
                 error: '#f44336',
@@ -1210,6 +1629,7 @@
                 z-index: 10000;
                 font-size: 14px;
                 animation: slideIn 0.3s ease;
+                max-width: 400px;
             `;
             notification.textContent = message;
             document.body.appendChild(notification);
@@ -1217,7 +1637,7 @@
             setTimeout(() => {
                 notification.style.animation = 'slideOut 0.3s ease';
                 setTimeout(() => notification.remove(), 300);
-            }, 4000);
+            }, duration);
         }
 
         // Démarrage
