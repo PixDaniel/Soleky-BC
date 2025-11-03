@@ -451,6 +451,185 @@
             transform: translateY(-2px);
         }
 
+        /* MODAL OTP */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-overlay.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 10px 50px rgba(0, 0, 0, 0.3);
+            animation: slideUp 0.3s ease;
+            text-align: center;
+        }
+
+        .modal-content h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        .modal-content p {
+            color: #666;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .otp-input-container {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin: 30px 0;
+        }
+
+        .otp-input {
+            width: 50px;
+            height: 60px;
+            font-size: 24px;
+            text-align: center;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-weight: bold;
+            color: #667eea;
+            transition: all 0.3s;
+        }
+
+        .otp-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 10px rgba(102, 126, 234, 0.3);
+        }
+
+        .otp-input.filled {
+            background: #f8f9ff;
+            border-color: #667eea;
+        }
+
+        .otp-input.error {
+            border-color: #f44336;
+            animation: shake 0.5s;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        .btn-modal {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-verify {
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+            color: white;
+        }
+
+        .btn-verify:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.4);
+        }
+
+        .btn-verify:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-cancel {
+            background: #f44336;
+            color: white;
+        }
+
+        .btn-cancel:hover {
+            background: #da190b;
+        }
+
+        .resend-link {
+            margin-top: 20px;
+            font-size: 13px;
+            color: #666;
+        }
+
+        .resend-link a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .resend-link a:hover {
+            text-decoration: underline;
+        }
+
+        .timer {
+            font-size: 12px;
+            color: #999;
+            margin-top: 10px;
+        }
+
+        .loading-spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
         @media print {
             body {
                 background: white;
@@ -464,7 +643,8 @@
 
             .buttons,
             .btn-small,
-            .logo-edit-note {
+            .logo-edit-note,
+            .modal-overlay {
                 display: none !important;
             }
 
@@ -472,7 +652,6 @@
                 border: 1px solid #333;
             }
 
-            /* Masquer les lignes de produits avec quantité = 0 */
             .products-table tr.empty-row {
                 display: none !important;
             }
@@ -483,7 +662,6 @@
                 transform: translateX(400px);
                 opacity: 0;
             }
-
             to {
                 transform: translateX(0);
                 opacity: 1;
@@ -495,7 +673,6 @@
                 transform: translateX(0);
                 opacity: 1;
             }
-
             to {
                 transform: translateX(400px);
                 opacity: 0;
@@ -528,12 +705,31 @@
             outline: none;
             border-color: #667eea;
         }
+
+        .status-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-verified {
+            background: #d4edda;
+            color: #155724;
+        }
     </style>
 </head>
 
 <body>
     <div class="container">
-        <!-- Titre et métadonnées EN HAUT -->
+        <!-- Titre et métadonnées -->
         <div class="doc-title">
             <h1>BON DE COMMANDE</h1>
         </div>
@@ -542,7 +738,10 @@
                 <strong>Date :</strong>
                 <input type="date" id="dateCommande" class="date-input" style="margin-left: 10px;">
             </div>
-            <div><strong>Référence :</strong> <span id="refCommande"></span></div>
+            <div>
+                <strong>Référence :</strong> <span id="refCommande"></span>
+                <span id="statusBadge"></span>
+            </div>
         </div>
 
         <!-- Header -->
@@ -687,7 +886,7 @@
                 style="width: 100%; min-height: 100px; padding: 15px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 14px; font-family: inherit;"></textarea>
         </div>
 
-        <!-- Signature Client uniquement -->
+        <!-- Signature Client -->
         <div class="signature-section">
             <div class="signature-box">
                 <p>✍️ Signature Client</p>
@@ -699,7 +898,6 @@
                     <label>Date de signature :</label>
                     <input type="date" id="dateSignatureClient" class="date-input">
                 </div>
-
                 <div id="cert-signature"></div>
             </div>
         </div>
@@ -708,11 +906,11 @@
         <div id="validate-bc-section" style="margin: 40px 0; text-align: center;">
             <button id="validateBCButton" class="btn"
                 style="background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%); color: white; font-size: 18px; padding: 18px 50px; box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);"
-                onclick="validateBonDeCommande()">
+                onclick="initiateOTPValidation()">
                 ✅ VALIDER LE BON DE COMMANDE
             </button>
             <p style="font-size: 13px; color: #666; margin-top: 10px;">
-                Le document sera finalisé et prêt à être imprimé ou exporté
+                Vous recevrez un code de validation par email
             </p>
         </div>
 
@@ -737,28 +935,60 @@
         </div>
     </div>
 
+    <!-- MODAL OTP -->
+    <div class="modal-overlay" id="otpModal">
+        <div class="modal-content">
+            <h2>🔐 Validation de votre commande</h2>
+            <p>Un code de validation à 6 chiffres a été envoyé à :<br>
+                <strong id="otpEmailDisplay"></strong>
+            </p>
+            
+            <div class="otp-input-container">
+                <input type="text" maxlength="1" class="otp-input" id="otp1" autocomplete="off">
+                <input type="text" maxlength="1" class="otp-input" id="otp2" autocomplete="off">
+                <input type="text" maxlength="1" class="otp-input" id="otp3" autocomplete="off">
+                <input type="text" maxlength="1" class="otp-input" id="otp4" autocomplete="off">
+                <input type="text" maxlength="1" class="otp-input" id="otp5" autocomplete="off">
+                <input type="text" maxlength="1" class="otp-input" id="otp6" autocomplete="off">
+            </div>
+
+            <div class="timer" id="otpTimer">Code valable pendant : <strong>10:00</strong></div>
+
+            <div id="otpError" style="color: #f44336; margin: 15px 0; display: none;"></div>
+            <div id="otpLoading" style="display: none;">
+                <div class="loading-spinner"></div>
+                <p>Vérification en cours...</p>
+            </div>
+
+            <div class="modal-buttons">
+                <button class="btn-modal btn-verify" id="verifyOTPBtn" onclick="verifyOTP()" disabled>
+                    ✓ Vérifier le code
+                </button>
+                <button class="btn-modal btn-cancel" onclick="closeOTPModal()">
+                    ✕ Annuler
+                </button>
+            </div>
+
+            <div class="resend-link">
+                Vous n'avez pas reçu le code ? 
+                <a onclick="resendOTP()">Renvoyer le code</a>
+            </div>
+        </div>
+    </div>
+
     <script>
         // ========================================
-        // CONFIGURATION - MODIFIEZ ICI
+        // CONFIGURATION
         // ========================================
 
-        // 🎨 CONFIGURATION DU LOGO
         const CONFIG_LOGO = {
-            // Option 1: URL d'une image hébergée en ligne
-            url: '', // Ex: 'https://votre-site.com/logo.png'
-
-            // Option 2: Image en Base64 (pour intégrer directement dans le fichier)
-            base64: '', // Ex: 'data:image/png;base64,iVBORw0KGg...'
-
-            // Dimensions
+            url: '',
+            base64: '',
             width: '150px',
             height: '80px',
-
-            // Texte alternatif si pas de logo
             fallbackText: 'SOLEKY'
         };
 
-        // 🔧 UNITÉS PAR LOT PAR DÉFAUT
         const CONFIG_UNITES_LOT = {
             'SK-001': 12,
             'SK-002': 12,
@@ -768,7 +998,6 @@
             'SK-006': 6
         };
 
-        // 🔧 CATALOGUE PRODUITS
         const PRODUCTS = [
             {
                 ref: 'SK-001',
@@ -818,16 +1047,32 @@
             }
         ];
 
-        // ========================================
-        // INITIALISATION
-        // ========================================
+        // URLs des workflows n8n
+        const N8N_BASE_URL = 'https://n8n.lelabodelite.com/webhook-test';
+        const WORKFLOWS = {
+            sendOTP: `${N8N_BASE_URL}/email-otp-soleky`,
+            sendAccuse: `${N8N_BASE_URL}/accuse-reception-soleky`,
+            saveBC: `${N8N_BASE_URL}/save-bc-soleky`,
+            getNextBC: `${N8N_BASE_URL}/get-next-bc-soleky`
+        };
 
+        // Variables globales
         let signaturePad = null;
         let signatureData = {
             signed: false,
             timestamp: null,
             hash: null
         };
+        let otpData = {
+            code: null,
+            expiryTime: null,
+            attempts: 0
+        };
+        let timerInterval = null;
+
+        // ========================================
+        // INITIALISATION
+        // ========================================
 
         function init() {
             initLogo();
@@ -836,19 +1081,17 @@
             generateProductRows();
             attachEventListeners();
             initSignaturePad();
+            initOTPInputs();
         }
 
         function initLogo() {
             const logoContainer = document.getElementById('logoContainer');
 
             if (CONFIG_LOGO.url) {
-                // Logo depuis URL
                 logoContainer.innerHTML = `<img src="${CONFIG_LOGO.url}" alt="Logo Soleky" class="logo-image" style="width: ${CONFIG_LOGO.width}; height: ${CONFIG_LOGO.height};">`;
             } else if (CONFIG_LOGO.base64) {
-                // Logo en Base64
                 logoContainer.innerHTML = `<img src="${CONFIG_LOGO.base64}" alt="Logo Soleky" class="logo-image" style="width: ${CONFIG_LOGO.width}; height: ${CONFIG_LOGO.height};">`;
             } else {
-                // Texte par défaut
                 logoContainer.innerHTML = `<div class="logo-placeholder" style="width: ${CONFIG_LOGO.width}; height: ${CONFIG_LOGO.height};">${CONFIG_LOGO.fallbackText}</div>`;
             }
         }
@@ -861,25 +1104,20 @@
 
         async function initReference() {
             try {
-                // Workflow 4 : Obtenir le prochain numéro BC depuis n8n/Google Sheets
-                const response = await fetch('https://n8n.lelabodelite.com/webhook-test/get-next-bc-soleky');
+                const response = await fetch(WORKFLOWS.getNextBC);
 
                 if (response.ok) {
                     const result = await response.json();
                     document.getElementById('refCommande').textContent = result.bcNumber;
-                    console.log('✅ Numéro BC obtenu depuis n8n:', result.bcNumber);
+                    console.log('✅ Numéro BC obtenu:', result.bcNumber);
                 } else {
-                    // Fallback : utiliser le compteur local si n8n ne répond pas
-                    console.warn('⚠️ n8n non disponible, utilisation du compteur local');
                     let counter = parseInt(localStorage.getItem('bcCounter') || '0');
                     counter++;
                     localStorage.setItem('bcCounter', counter);
                     document.getElementById('refCommande').textContent = `BC-${String(counter).padStart(3, '0')}`;
                 }
             } catch (error) {
-                // Fallback en cas d'erreur réseau
                 console.error('❌ Erreur connexion n8n:', error);
-                console.warn('⚠️ Utilisation du compteur local');
                 let counter = parseInt(localStorage.getItem('bcCounter') || '0');
                 counter++;
                 localStorage.setItem('bcCounter', counter);
@@ -921,7 +1159,6 @@
         }
 
         function attachEventListeners() {
-            // Format change
             document.querySelectorAll('.format-select').forEach(select => {
                 select.addEventListener('change', function () {
                     const ref = this.dataset.ref;
@@ -933,7 +1170,6 @@
                 });
             });
 
-            // Quantity change
             document.querySelectorAll('.qty-input').forEach(input => {
                 input.addEventListener('input', function () {
                     markEmptyRows();
@@ -941,7 +1177,6 @@
                 });
             });
 
-            // TVA change
             document.getElementById('tauxTVA').addEventListener('input', calculateTotals);
         }
 
@@ -959,7 +1194,6 @@
         function calculateTotals() {
             let sousTotal = 0;
 
-            // Produits standards
             document.querySelectorAll('.qty-input').forEach(input => {
                 const ref = input.dataset.ref;
                 const qtyCartons = parseInt(input.value) || 0;
@@ -1125,66 +1359,398 @@
         }
 
         // ========================================
-        // VALIDATION DU BON DE COMMANDE
+        // VALIDATION OTP
         // ========================================
 
-        function validateBonDeCommande() {
+        function initOTPInputs() {
+            const inputs = document.querySelectorAll('.otp-input');
+            
+            inputs.forEach((input, index) => {
+                // Auto-focus suivant
+                input.addEventListener('input', (e) => {
+                    if (e.target.value.length === 1) {
+                        input.classList.add('filled');
+                        if (index < inputs.length - 1) {
+                            inputs[index + 1].focus();
+                        }
+                    }
+                    checkOTPComplete();
+                });
+
+                // Backspace pour revenir en arrière
+                input.addEventListener('keydown', (e) => {
+                    if (e.key === 'Backspace' && e.target.value === '' && index > 0) {
+                        inputs[index - 1].focus();
+                        inputs[index - 1].classList.remove('filled');
+                    }
+                });
+
+                // Empêcher saisie non-numérique
+                input.addEventListener('keypress', (e) => {
+                    if (!/[0-9]/.test(e.key)) {
+                        e.preventDefault();
+                    }
+                });
+
+                // Paste handling
+                input.addEventListener('paste', (e) => {
+                    e.preventDefault();
+                    const pastedData = e.clipboardData.getData('text').replace(/\D/g, '').slice(0, 6);
+                    inputs.forEach((inp, i) => {
+                        if (pastedData[i]) {
+                            inp.value = pastedData[i];
+                            inp.classList.add('filled');
+                        }
+                    });
+                    checkOTPComplete();
+                });
+            });
+        }
+
+        function checkOTPComplete() {
+            const inputs = document.querySelectorAll('.otp-input');
+            const allFilled = Array.from(inputs).every(input => input.value.length === 1);
+            document.getElementById('verifyOTPBtn').disabled = !allFilled;
+        }
+
+        async function initiateOTPValidation() {
+            // Validation des données
             if (!validateFormData()) return;
             if (!signatureData.signed) {
                 showNotification('⚠️ Veuillez signer le bon de commande avant de valider', 'warning');
                 return;
             }
 
+            const clientEmail = document.getElementById('clientEmail').value;
+            const documentRef = document.getElementById('refCommande').textContent;
+
+            // Désactiver le bouton
             const validateBtn = document.getElementById('validateBCButton');
             validateBtn.disabled = true;
-            validateBtn.textContent = '⏳ Validation en cours...';
+            validateBtn.textContent = '⏳ Envoi du code...';
 
-            // Envoyer l'accusé de réception via n8n
-            sendAccuseReceptionViaEmail();
+            try {
+                // Appel Workflow 1 : Envoi OTP
+                const response = await fetch(WORKFLOWS.sendOTP, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        email: clientEmail,
+                        documentRef: documentRef,
+                        signatureType: 'client'
+                    })
+                });
 
-            setTimeout(() => {
-                // Masquer le bouton de validation
-                document.getElementById('validate-bc-section').style.display = 'none';
+                if (response.ok) {
+                    const result = await response.json();
+                    console.log('✅ Code OTP envoyé:', result);
+                    
+                    // Stocker les infos OTP localement (le vrai code est dans l'email)
+                    otpData.expiryTime = Date.now() + (10 * 60 * 1000); // 10 minutes
+                    otpData.attempts = 0;
+                    
+                    // Afficher le modal OTP
+                    showOTPModal(clientEmail);
+                    
+                    showNotification('✅ Code envoyé ! Vérifiez votre email', 'success');
+                } else {
+                    throw new Error('Erreur lors de l\'envoi du code');
+                }
+            } catch (error) {
+                console.error('❌ Erreur:', error);
+                showNotification('❌ Erreur lors de l\'envoi du code. Veuillez réessayer.', 'error');
+                validateBtn.disabled = false;
+                validateBtn.textContent = '✅ VALIDER LE BON DE COMMANDE';
+            }
+        }
 
-                // Afficher le message de confirmation
-                const confirmMsg = document.getElementById('confirmation-message');
-                document.getElementById('confirmed-ref').textContent = document.getElementById('refCommande').textContent;
-                document.getElementById('confirmed-client').textContent = document.getElementById('clientNom').value;
-                document.getElementById('confirmed-montant').textContent = document.getElementById('totalTTC').textContent;
-                confirmMsg.style.display = 'block';
+        function showOTPModal(email) {
+            document.getElementById('otpEmailDisplay').textContent = email;
+            document.getElementById('otpModal').classList.add('show');
+            document.getElementById('otp1').focus();
+            
+            // Démarrer le timer
+            startOTPTimer();
+            
+            // Réinitialiser les champs
+            document.querySelectorAll('.otp-input').forEach(input => {
+                input.value = '';
+                input.classList.remove('filled', 'error');
+            });
+            document.getElementById('otpError').style.display = 'none';
+            document.getElementById('verifyOTPBtn').disabled = true;
+        }
 
-                // Afficher les boutons d'action
-                document.getElementById('action-buttons').style.display = 'flex';
+        function closeOTPModal() {
+            document.getElementById('otpModal').classList.remove('show');
+            clearInterval(timerInterval);
+            
+            // Réactiver le bouton de validation
+            const validateBtn = document.getElementById('validateBCButton');
+            validateBtn.disabled = false;
+            validateBtn.textContent = '✅ VALIDER LE BON DE COMMANDE';
+        }
 
-                // Scroll vers le message
-                confirmMsg.scrollIntoView({ behavior: 'smooth', block: 'center' });
-
-                showNotification('✅ Bon de commande validé avec succès !', 'success');
+        function startOTPTimer() {
+            clearInterval(timerInterval);
+            
+            timerInterval = setInterval(() => {
+                const now = Date.now();
+                const remaining = otpData.expiryTime - now;
+                
+                if (remaining <= 0) {
+                    clearInterval(timerInterval);
+                    document.getElementById('otpTimer').innerHTML = 
+                        '<span style="color: #f44336;">Code expiré</span>';
+                    document.getElementById('verifyOTPBtn').disabled = true;
+                    showOTPError('Code expiré. Veuillez demander un nouveau code.');
+                    return;
+                }
+                
+                const minutes = Math.floor(remaining / 60000);
+                const seconds = Math.floor((remaining % 60000) / 1000);
+                document.getElementById('otpTimer').innerHTML = 
+                    `Code valable pendant : <strong>${minutes}:${seconds.toString().padStart(2, '0')}</strong>`;
             }, 1000);
+        }
+
+        async function verifyOTP() {
+            const inputs = document.querySelectorAll('.otp-input');
+            const enteredCode = Array.from(inputs).map(input => input.value).join('');
+            
+            // Vérifier que le code est complet
+            if (enteredCode.length !== 6) {
+                showOTPError('Veuillez saisir les 6 chiffres du code');
+                return;
+            }
+            
+            // Vérifier l'expiration
+            if (Date.now() > otpData.expiryTime) {
+                showOTPError('Code expiré. Veuillez demander un nouveau code.');
+                return;
+            }
+            
+            // Limiter les tentatives
+            otpData.attempts++;
+            if (otpData.attempts > 5) {
+                showOTPError('Trop de tentatives. Veuillez demander un nouveau code.');
+                return;
+            }
+            
+            // Afficher le loading
+            document.getElementById('otpLoading').style.display = 'block';
+            document.getElementById('verifyOTPBtn').disabled = true;
+            
+            // SIMULATION : Dans une vraie implémentation, vous devriez :
+            // 1. Soit stocker le code côté serveur (Google Sheets) et le vérifier via un workflow
+            // 2. Soit utiliser un système de tokens JWT
+            
+            // Pour cet exemple, nous simulons une vérification réussie après 1 seconde
+            // IMPORTANT : Remplacer cette logique par une vraie vérification serveur !
+            
+            setTimeout(async () => {
+                // SIMULATION : Accepter tout code pour la démo
+                // Dans la vraie vie : vérifier via workflow n8n ou API
+                const isValid = true; // Remplacer par vraie vérification
+                
+                document.getElementById('otpLoading').style.display = 'none';
+                
+                if (isValid) {
+                    // Code valide : fermer modal et finaliser
+                    closeOTPModal();
+                    await finalizeValidation();
+                } else {
+                    // Code invalide
+                    showOTPError(`Code incorrect. ${5 - otpData.attempts} tentatives restantes`);
+                    inputs.forEach(input => {
+                        input.value = '';
+                        input.classList.remove('filled');
+                        input.classList.add('error');
+                    });
+                    setTimeout(() => {
+                        inputs.forEach(input => input.classList.remove('error'));
+                    }, 500);
+                    document.getElementById('otp1').focus();
+                    document.getElementById('verifyOTPBtn').disabled = false;
+                }
+            }, 1500);
+        }
+
+        function showOTPError(message) {
+            const errorDiv = document.getElementById('otpError');
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+        }
+
+        async function resendOTP() {
+            const clientEmail = document.getElementById('clientEmail').value;
+            const documentRef = document.getElementById('refCommande').textContent;
+            
+            try {
+                const response = await fetch(WORKFLOWS.sendOTP, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        email: clientEmail,
+                        documentRef: documentRef,
+                        signatureType: 'client'
+                    })
+                });
+                
+                if (response.ok) {
+                    otpData.expiryTime = Date.now() + (10 * 60 * 1000);
+                    otpData.attempts = 0;
+                    startOTPTimer();
+                    showNotification('✅ Nouveau code envoyé !', 'success');
+                    document.getElementById('otpError').style.display = 'none';
+                }
+            } catch (error) {
+                console.error('❌ Erreur renvoi code:', error);
+                showNotification('❌ Erreur lors du renvoi du code', 'error');
+            }
+        }
+
+        async function finalizeValidation() {
+            // Masquer le bouton de validation
+            document.getElementById('validate-bc-section').style.display = 'none';
+            
+            // Afficher badge "vérifié"
+            document.getElementById('statusBadge').innerHTML = 
+                '<span class="status-badge status-verified">✓ Vérifié</span>';
+            
+            // Envoyer l'accusé de réception
+            await sendAccuseReception();
+            
+            // Sauvegarder dans Google Sheets
+            await saveToGoogleSheets();
+            
+            // Afficher le message de confirmation
+            const confirmMsg = document.getElementById('confirmation-message');
+            document.getElementById('confirmed-ref').textContent = document.getElementById('refCommande').textContent;
+            document.getElementById('confirmed-client').textContent = document.getElementById('clientNom').value;
+            document.getElementById('confirmed-montant').textContent = document.getElementById('totalTTC').textContent;
+            confirmMsg.style.display = 'block';
+            
+            // Afficher les boutons d'action
+            document.getElementById('action-buttons').style.display = 'flex';
+            
+            // Scroll vers le message
+            confirmMsg.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            
+            showNotification('✅ Bon de commande validé avec succès !', 'success');
+        }
+
+        async function sendAccuseReception() {
+            const dataToSend = collectBCData();
+            
+            try {
+                const response = await fetch(WORKFLOWS.sendAccuse, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(dataToSend)
+                });
+                
+                if (response.ok) {
+                    console.log('✅ Accusé de réception envoyé');
+                } else {
+                    console.error('❌ Erreur envoi accusé:', response.status);
+                }
+            } catch (error) {
+                console.error('❌ Erreur:', error);
+            }
+        }
+
+        async function saveToGoogleSheets() {
+            const dataToSend = collectBCData();
+            
+            try {
+                const response = await fetch(WORKFLOWS.saveBC, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(dataToSend)
+                });
+                
+                if (response.ok) {
+                    console.log('✅ BC sauvegardé dans Google Sheets');
+                } else {
+                    console.error('❌ Erreur sauvegarde:', response.status);
+                }
+            } catch (error) {
+                console.error('❌ Erreur:', error);
+            }
+        }
+
+        function collectBCData() {
+            let produits = [];
+            document.querySelectorAll('.qty-input').forEach(input => {
+                const qty = parseInt(input.value);
+                if (qty > 0) {
+                    const ref = input.dataset.ref;
+                    const row = input.closest('tr');
+                    const product = PRODUCTS.find(p => p.ref === ref);
+                    const format = row.querySelector('.format-select').value;
+                    const parfum = row.querySelector('.parfum-select').value;
+                    const unitesLot = CONFIG_UNITES_LOT[ref] || 12;
+                    
+                    produits.push({
+                        ref: ref,
+                        nom: product.name,
+                        format: format,
+                        parfum: parfum,
+                        qtyCartons: qty,
+                        unitesLot: unitesLot
+                    });
+                }
+            });
+            
+            return {
+                documentRef: document.getElementById('refCommande').textContent,
+                clientEmail: document.getElementById('clientEmail').value,
+                clientNom: document.getElementById('clientNom').value,
+                clientTel: document.getElementById('clientTel').value,
+                clientAdresse: document.getElementById('clientAdresse').value,
+                dateCommande: document.getElementById('dateCommande').value,
+                totalTTC: document.getElementById('totalTTC').textContent,
+                soustotalHT: document.getElementById('sousTotal').textContent,
+                tva: document.getElementById('tva').textContent,
+                adresseLivraison: document.getElementById('clientAdresseLivraison').value || 
+                                  document.getElementById('clientAdresse').value,
+                produits: produits,
+                signatureHash: signatureData.hash,
+                signatureTimestamp: signatureData.timestamp
+            };
         }
 
         function validateFormData() {
             const clientNom = document.getElementById('clientNom').value;
             const clientEmail = document.getElementById('clientEmail').value;
             const clientTel = document.getElementById('clientTel').value;
-
+            
             if (!clientNom || !clientEmail || !clientTel) {
                 showNotification('⚠️ Veuillez renseigner toutes les informations client obligatoires', 'warning');
                 return false;
             }
-
+            
             let hasProducts = false;
             document.querySelectorAll('.qty-input').forEach(input => {
                 if (parseInt(input.value) > 0) {
                     hasProducts = true;
                 }
             });
-
+            
             if (!hasProducts) {
                 showNotification('⚠️ Veuillez ajouter au moins un produit à la commande', 'warning');
                 return false;
             }
-
+            
             return true;
         }
 
@@ -1196,10 +1762,9 @@
             const ref = document.getElementById('refCommande').textContent;
             const date = new Date().toISOString().split('T')[0].replace(/-/g, '');
             const filename = `bon_commande_soleky_${ref}_${date}.csv`;
-
+            
             let csv = 'Réf,Produit,Format,Parfum,Qté Cartons,Unités/Lot,Prix Unit. (FCFA),Montant (FCFA)\n';
-
-            // Produits standards
+            
             document.querySelectorAll('.qty-input').forEach(input => {
                 const ref = input.dataset.ref;
                 const qtyCartons = input.value;
@@ -1211,121 +1776,23 @@
                     const unitesLot = CONFIG_UNITES_LOT[ref] || 12;
                     const prixUnit = row.querySelector('.unit-price').textContent;
                     const montant = row.querySelector('.total-price').textContent;
-
+                    
                     csv += `${ref},"${product.name}",${format},${parfum},${qtyCartons},${unitesLot},${prixUnit},${montant}\n`;
                 }
             });
-
+            
             const tauxTVA = document.getElementById('tauxTVA').value;
             csv += '\n,,,,,,Sous-total HT,' + document.getElementById('sousTotal').textContent + '\n';
             csv += `,,,,,,TVA (${tauxTVA}%),` + document.getElementById('tva').textContent + '\n';
             csv += ',,,,,,Total TTC,' + document.getElementById('totalTTC').textContent + '\n';
-
+            
             const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
             const link = document.createElement('a');
             link.href = URL.createObjectURL(blob);
             link.download = filename;
             link.click();
-
+            
             showNotification('✅ Export CSV téléchargé !', 'success');
-        }
-
-        // ========================================
-        // INTÉGRATION N8N - ENVOI EMAILS
-        // ========================================
-
-        async function sendAccuseReceptionViaEmail() {
-            const docRef = document.getElementById('refCommande').textContent;
-            const clientEmail = document.getElementById('clientEmail').value;
-            const clientNom = document.getElementById('clientNom').value;
-            const clientTel = document.getElementById('clientTel').value;
-            const clientAdresse = document.getElementById('clientAdresse').value;
-            const dateCommande = document.getElementById('dateCommande').value;
-            const totalTTC = document.getElementById('totalTTC').textContent;
-            const soustotalHT = document.getElementById('sousTotal').textContent;
-            const tva = document.getElementById('tva').textContent;
-            const adresseLivraison = document.getElementById('clientAdresseLivraison').value;
-
-            // Collecter les produits commandés
-            let produits = [];
-            document.querySelectorAll('.qty-input').forEach(input => {
-                const qty = parseInt(input.value);
-                if (qty > 0) {
-                    const ref = input.dataset.ref;
-                    const row = input.closest('tr');
-                    const product = PRODUCTS.find(p => p.ref === ref);
-                    const format = row.querySelector('.format-select').value;
-                    const parfum = row.querySelector('.parfum-select').value;
-                    const unitesLot = CONFIG_UNITES_LOT[ref] || 12;
-
-                    produits.push({
-                        ref: ref,
-                        nom: product.name,
-                        format: format,
-                        parfum: parfum,
-                        qtyCartons: qty,
-                        unitesLot: unitesLot
-                    });
-                }
-            });
-
-            const dataToSend = {
-                documentRef: docRef,
-                clientEmail: clientEmail,
-                clientNom: clientNom,
-                clientTel: clientTel,
-                clientAdresse: clientAdresse,
-                dateCommande: dateCommande,
-                totalTTC: totalTTC,
-                soustotalHT: soustotalHT,
-                tva: tva,
-                adresseLivraison: adresseLivraison || clientAdresse,
-                produits: produits,
-                signatureHash: signatureData.hash,
-                signatureTimestamp: signatureData.timestamp
-            };
-
-            try {
-                // Workflow 2 : Accusé de réception
-                const response = await fetch('https://n8n.lelabodelite.com/webhook-test/email-otp-soleky', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(dataToSend)
-                });
-
-                if (response.ok) {
-                    console.log('✅ Accusé de réception envoyé avec succès');
-
-                    // Workflow 3 : Sauvegarde dans Google Sheets
-                    await saveToGoogleSheets(dataToSend);
-                } else {
-                    console.error('❌ Erreur lors de l\'envoi de l\'accusé:', response.status);
-                }
-            } catch (error) {
-                console.error('❌ Erreur connexion n8n:', error);
-            }
-        }
-
-        async function saveToGoogleSheets(data) {
-            try {
-                const response = await fetch('https://n8n.lelabodelite.com/webhook-test/save-bc-soleky', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(data)
-                });
-
-                if (response.ok) {
-                    console.log('✅ BC sauvegardé dans Google Sheets');
-                } else {
-                    console.error('❌ Erreur sauvegarde Google Sheets:', response.status);
-                }
-            } catch (error) {
-                console.error('❌ Erreur connexion Google Sheets:', error);
-            }
         }
 
         // ========================================
@@ -1339,7 +1806,7 @@
                 warning: '#ff9800',
                 info: '#2196F3'
             };
-
+            
             const notification = document.createElement('div');
             notification.style.cssText = `
                 position: fixed;
@@ -1356,7 +1823,7 @@
             `;
             notification.textContent = message;
             document.body.appendChild(notification);
-
+            
             setTimeout(() => {
                 notification.style.animation = 'slideOut 0.3s ease';
                 setTimeout(() => notification.remove(), 300);
