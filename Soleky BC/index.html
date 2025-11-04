@@ -28,6 +28,26 @@
             padding: 40px;
         }
 
+        /* LOGO CENTRÉ EN HAUT */
+        .logo-header {
+            text-align: center;
+            margin-bottom: 35px;
+            padding-bottom: 25px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .logo-header img {
+            max-width: 220px;
+            height: auto;
+            max-height: 130px;
+            object-fit: contain;
+            transition: transform 0.3s ease;
+        }
+
+        .logo-header img:hover {
+            transform: scale(1.05);
+        }
+
         .doc-title {
             text-align: center;
             margin-bottom: 15px;
@@ -75,36 +95,6 @@
             display: flex;
             flex-direction: column;
             gap: 15px;
-        }
-
-        .logo-section {
-            position: relative;
-        }
-
-        .logo-placeholder {
-            width: 150px;
-            height: 80px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
-            font-size: 24px;
-        }
-
-        .logo-image {
-            max-width: 150px;
-            max-height: 80px;
-            object-fit: contain;
-        }
-
-        .logo-edit-note {
-            font-size: 10px;
-            color: #999;
-            margin-top: 5px;
-            font-style: italic;
         }
 
         .company-info {
@@ -643,7 +633,6 @@
 
             .buttons,
             .btn-small,
-            .logo-edit-note,
             .modal-overlay {
                 display: none !important;
             }
@@ -654,6 +643,10 @@
 
             .products-table tr.empty-row {
                 display: none !important;
+            }
+
+            .logo-header {
+                border-bottom: 1px solid #333;
             }
         }
 
@@ -729,6 +722,11 @@
 
 <body>
     <div class="container">
+        <!-- LOGO CENTRÉ EN HAUT -->
+        <div class="logo-header">
+            <img src="./Soleky_Logo.jpg" alt="Soleky Logo" />
+        </div>
+
         <!-- Titre et métadonnées -->
         <div class="doc-title">
             <h1>BON DE COMMANDE</h1>
@@ -748,20 +746,16 @@
         <div class="header">
             <!-- Gauche : Soleky -->
             <div class="header-left">
-                <div class="logo-section">
-                    <div id="logoContainer">
-                        <div class="logo-placeholder">SOLEKY</div>
-                    </div>
-                    <p class="logo-edit-note">💡 Modifiez le logo dans la section CONFIG_LOGO du script</p>
-                </div>
                 <div class="company-info">
                     <strong>Soleky</strong>
                     Yellowfield Organic Products<br>
-                    Ahrmou 1, ancienne route de Yamoussoukro<br>
+                    Marcory Biétry, Rue du Canal – Rue G103<br>
                     Abidjan, Côte d'Ivoire<br>
                     <strong style="font-size: 13px;">RCCM:</strong> CI-ABJ-03-2022-B13-02595<br>
-                    📧 contact@soleky.com<br>
-                    📞 +225 07 07 18 42 93
+                    📧 info@yop.ci<br>
+                    📞 +225 07 07 18 42 93<br>
+                    🌐 www.yop.ci • www.soleky.com<br>
+                    📱 @soleky.ci (IG/FB) • SOLEKY (LinkedIn)
                 </div>
             </div>
 
@@ -981,14 +975,6 @@
         // CONFIGURATION
         // ========================================
 
-        const CONFIG_LOGO = {
-            url: '',
-            base64: '',
-            width: '150px',
-            height: '80px',
-            fallbackText: 'SOLEKY'
-        };
-
         const CONFIG_UNITES_LOT = {
             'SK-001': 12,
             'SK-002': 12,
@@ -1002,12 +988,10 @@
             {
                 ref: 'SK-001',
                 name: 'Beurre de karité bio pur',
-                formats: ['250 ml', '280 ml', '390 ml'],
+                formats: ['250 ml'],
                 parfums: ['Nature', 'Coco', 'Vanille'],
                 prices: {
-                    '250 ml': 7500,
-                    '280 ml': 8500,
-                    '390 ml': 11500
+                    '250 ml': 7500
                 }
             },
             {
@@ -1037,14 +1021,14 @@
                 formats: ['300 g'],
                 parfums: ['Nature', 'Coco', 'Vanille'],
                 prices: { '300 g': 4500 }
-            },
-            {
-                ref: 'SK-006',
-                name: 'Coffret découverte "Soleky Ritual"',
-                formats: ['Coffret 5 pièces'],
-                parfums: ['Mix parfums'],
-                prices: { 'Coffret 5 pièces': 35000 }
             }
+            // {
+            //     ref: 'SK-006',
+            //     name: 'Coffret découverte "Soleky Ritual"',
+            //     formats: ['Coffret 5 pièces'],
+            //     parfums: ['Mix parfums'],
+            //     prices: { 'Coffret 5 pièces': 35000 }
+            // }
         ];
 
         // URLs des workflows n8n
@@ -1075,25 +1059,12 @@
         // ========================================
 
         function init() {
-            initLogo();
             initDate();
             initReference();
             generateProductRows();
             attachEventListeners();
             initSignaturePad();
             initOTPInputs();
-        }
-
-        function initLogo() {
-            const logoContainer = document.getElementById('logoContainer');
-
-            if (CONFIG_LOGO.url) {
-                logoContainer.innerHTML = `<img src="${CONFIG_LOGO.url}" alt="Logo Soleky" class="logo-image" style="width: ${CONFIG_LOGO.width}; height: ${CONFIG_LOGO.height};">`;
-            } else if (CONFIG_LOGO.base64) {
-                logoContainer.innerHTML = `<img src="${CONFIG_LOGO.base64}" alt="Logo Soleky" class="logo-image" style="width: ${CONFIG_LOGO.width}; height: ${CONFIG_LOGO.height};">`;
-            } else {
-                logoContainer.innerHTML = `<div class="logo-placeholder" style="width: ${CONFIG_LOGO.width}; height: ${CONFIG_LOGO.height};">${CONFIG_LOGO.fallbackText}</div>`;
-            }
         }
 
         function initDate() {
